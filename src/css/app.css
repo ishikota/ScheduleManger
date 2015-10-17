@@ -1,0 +1,24 @@
+td, th {
+  padding : 10px;
+  text-align : center;
+}
+
+th {
+  text-align : center;
+}
+
+/* for CalHead component */
+.cal-head {
+  text-align    : center;
+  margin-bottom : 8px;
+}
+
+.cal-head-ctrl.back {
+  float : left;
+  margin-left : 16px;
+}
+
+.cal-head-ctrl.next {
+  float : right;
+  margin-right : 16px;
+}
