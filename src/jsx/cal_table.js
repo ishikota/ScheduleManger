@@ -17,13 +17,13 @@ var CalTable = React.createClass({
       lines  = this.getLines();
 
     for ( i=0; i<lines; i++ ) {
-      rows.push(<CalRow start={i*7-offset+1} end={end} />);
+      rows.push(<CalRow key={i} start={i*7-offset+1} end={end} />);
     }
     return rows;
   },
   render : function () {
     return (
-      <table>
+      <table className="cal-table">
         <thead>
           <tr>
             <th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th>

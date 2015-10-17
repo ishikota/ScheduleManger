@@ -1,13 +1,25 @@
+body {
+  font-family : 'Roboto', sans-serif;
+}
 td, th {
-  padding : 10px;
+  padding : 14px;
   text-align : center;
+}
+
+td {
+  color : rgba(0,0,0,0.87);
 }
 
 th {
   text-align : center;
+  font-size : 0.88em;
+  color : rgba(0,0,0,0.54);
 }
 
-/* for CalHead component */
+.cal-container {
+  padding : 16px;
+}
+
 .cal-head {
   text-align    : center;
   margin-bottom : 8px;
@@ -21,4 +33,13 @@ th {
 .cal-head-ctrl.next {
   float : right;
   margin-right : 16px;
+}
+
+.cal-table {
+  margin : 0 auto;
+}
+
+/* Google Material icons */
+.material-icons.md-dark { 
+  color: rgba(0, 0, 0, 0.54);
 }
