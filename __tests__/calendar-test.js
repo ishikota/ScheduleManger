@@ -1,10 +1,10 @@
-jest.dontMock('../src/jsx/calendar');
+jest.dontMock('../client/app/components/calendar');
 
 describe( 'Calendar Header component' , function () {
   var React     = require('react/addons');
-  var Calendar   = require('../src/jsx/calendar');
-  var CalHeader = require('../src/jsx/cal_head');
-  var CalTable  = require('../src/jsx/cal_table');
+  var Calendar   = require('../client/app/components/calendar');
+  var CalHeader = require('../client/app/components/cal_head');
+  var CalTable  = require('../client/app/components/cal_table');
   var TestUtils = React.addons.TestUtils;
 
   describe( 'renderIntoDocument', function () {

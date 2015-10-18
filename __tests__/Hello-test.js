@@ -1,7 +1,7 @@
-jest.dontMock('../src/jsx/Hello.js');
+jest.dontMock('../client/app/components/Hello');
 describe('Hello component', function () {
   var React = require('react/addons');
-  var Hello = require('../src/jsx/Hello.js');
+  var Hello = require('../client/app/components/Hello');
   var TestUtils = React.addons.TestUtils;
 
   it( 'should have the content "Hello World"', function() {

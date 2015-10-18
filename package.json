@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build" : "browserify --debug src/jsx/*.js > dist/bundle.js",
+    "build" : "browserify client/client.js > public/build/bundle.js --debug",
     "watch" : "watchify --debug src/jsx/*.js -v -o dist/bundle.js",
     "test"  : "jest"
   },
