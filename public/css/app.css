@@ -39,6 +39,20 @@ th {
   margin : 0 auto;
 }
 
+.avtr {
+  width  : 56px;
+  margin : 4px;
+}
+
+.panel-body {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.caret.left {
+  margin-right: 8px;
+}
+
 /* Google Material icons */
 .material-icons.md-dark { 
   color: rgba(0, 0, 0, 0.54);

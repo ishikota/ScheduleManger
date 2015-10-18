@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build" : "browserify client/client.js > public/build/bundle.js --debug",
-    "watch" : "watchify --debug src/jsx/*.js -v -o dist/bundle.js",
+    "watch" : "watchify --debug client/client.js -v -o public/build/bundle.js",
     "test"  : "jest"
   },
   "browserify": {
