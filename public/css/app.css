@@ -20,7 +20,7 @@ th {
 }
 
 .cal-container {
-  padding : 16px;
+  padding : 0px;
 }
 
 .cal-head {
@@ -41,7 +41,8 @@ th {
 }
 
 .cal-table {
-  margin : 0 auto;
+  width  : 100%;
+  margin : 0px;
 }
 
 .avtr {

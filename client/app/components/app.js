@@ -9,10 +9,10 @@ var App = React.createClass({
       <div className='app'>
         <MainHeader/>
         <div className="main-content container">
-          <div className="col-xs-7">
+          <div className="col-xs-12 col-sm-7">
             <Calendar/>
           </div>
-          <div className="col-xs-5">
+          <div className="col-xs-12 col-sm-5">
             <SchedulePanel/>
           </div>
         </div>
