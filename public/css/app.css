@@ -16,6 +16,9 @@ th {
   color : rgba(0,0,0,0.54);
 }
 
+.main-content {
+}
+
 .cal-container {
   padding : 16px;
 }
@@ -28,11 +31,13 @@ th {
 .cal-head-ctrl.back {
   float : left;
   margin-left : 16px;
+  cursor : pointer;
 }
 
 .cal-head-ctrl.next {
   float : right;
   margin-right : 16px;
+  cursor : pointer;
 }
 
 .cal-table {

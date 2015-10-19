@@ -1,11 +1,11 @@
-var React         = require('react');
-var Calendar      = require('./app/components/calendar');
-var SchedulePanel = require('./app/components/schedule_panel');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var App   = require('./app/components/app');
 
+//alow react dev tols work
 window.React = React;
 
-React.render(
-    //<Calendar year={2015} month={1}/>,
-    <SchedulePanel />,
-    document.getElementById('tb-container')
+ReactDOM.render(
+    <App/>,
+    document.getElementById('container')
 );
