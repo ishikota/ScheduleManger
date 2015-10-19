@@ -45,6 +45,20 @@ th {
   margin : 0px;
 }
 
+.cal-cell {
+  cursor : pointer;
+}
+
+.cal-cell.selected {
+  background : #3D5AFE;
+  width : 32px;
+  height : 32px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  color : #fff;
+}
+
 .avtr {
   width  : 56px;
   margin : 4px;

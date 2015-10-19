@@ -1,4 +1,5 @@
 var React = require('react');
+var ScheduleActions = require('../flux/ScheduleActions');
 
 /**
  * When val is set to -1 then this cell displays nothing.
@@ -14,13 +15,19 @@ var CalCell = React.createClass({
     };
   },
   render: function () {
-    var valid, content;
+    var valid, content, clazz;
     valid = this.validate( this.props.val );
     content = valid ? this.props.val : '';
-    return <td>{content}</td>;
+    clazz = "cal-cell"
+    clazz += this.state.selected ? " selected" : "";
+    return <td className={clazz} onClick={this.handleClick}>{content}</td>;
   },
   validate : function ( val ) {
     return val != -1;
+  },
+  handleClick : function (ev) {
+    this.setState( { selected : !this.state.selected } );
+    ScheduleActions.fetchDateInfo(0,0,0);
   }
 });
 
