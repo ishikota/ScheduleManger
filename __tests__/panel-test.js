@@ -1,45 +1,35 @@
 jest.dontMock('../client/app/components/panel')
+jest.dontMock('../client/app/fake_data');
 
 describe( 'Panel component', function () {
   var React       = require('react/addons');
   var Panel       = require('../client/app/components/panel');
   var PanelHeader = require('../client/app/components/panel_head');
   var PanelBody   = require('../client/app/components/panel_body');
+  var FakeData    = require('../client/app/fake_data');
   var TestUtils   = React.addons.TestUtils;
 
   var subject,
-      mockFetch = jest.genMockFunction().mockReturnValue(
-        [ { msg: "mock", avtr_ids : [1,1] } ]
-      ),
       menu = [
-        { id : 0, title : "default", fetch_data : jest.genMockFunction() },
-        { id : 1, title : "menu1"  , fetch_data : mockFetch              },
-        { id : 2, title : "menu2"  , fetch_data : jest.genMockFunction() },
-        { id : 3, title : "menu3"  , fetch_data : jest.genMockFunction() }
+        { id : 0, title : "default" },
+        { id : 1, title : "menu1"   },
+        { id : 2, title : "menu2"   },
+        { id : 3, title : "menu3"   }
       ];
 
   beforeEach( function () {
     subject = TestUtils.renderIntoDocument(
-      <Panel menu={menu} />
+      <Panel menu={menu} data={FakeData.PANEL2}/>
       );
   });
 
   describe( 'initialize child components', function () {
 
     it ( 'should pass menu and items to child components', function () {
-      expect(PanelHeader.mock.calls[0][0].menu).toEqual(menu);
-      expect(menu[0].fetch_data).toBeCalled();
-    });
-
-  });
-
-  describe( 'handle menu click', function () {
-    it ( 'should update body content', function () {
-      var media,
+      var head = TestUtils.scryRenderedComponentsWithType(subject, PanelHeader),
           body = TestUtils.scryRenderedComponentsWithType(subject, PanelBody);
-      subject.state.menu[1].callback();
-      expect(mockFetch).toBeCalled();
-      expect(body[0].props.items).toEqual(mockFetch());
+      expect(head[0].props.menu).toEqual(menu);
+      expect(body[0].props.items).toEqual(FakeData.PANEL2);
     });
   });
 

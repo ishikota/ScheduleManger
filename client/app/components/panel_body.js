@@ -3,10 +3,10 @@ var PanelMedia = require('./panel_media');
 
 var PanelBody = React.createClass({
   renderMedias : function () {
-    return this.props.items.map( function ( item, i ) {
+    return this.props.items.data.map( function ( item, i ) {
       return (
         <li key={i} className="media">
-          <PanelMedia msg={item.msg} avtr_ids={item.avtr_ids} />
+          <PanelMedia msg={item.msg} avtr={item.avtr} />
         </li>
       );
     });

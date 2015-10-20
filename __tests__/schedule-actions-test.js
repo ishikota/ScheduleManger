@@ -24,6 +24,14 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
+    it ( "should dispatch changeFilter request", function () {
+      ScheduleActions.changeFilter( 1, 2);
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.FILTER,
+        data : { room_id : 1 , filter : 2 }
+      });
+    });
+
     it ( "should dispatch FetchMonthInfo request", function () {
       ScheduleActions.fetchMonthInfo(0, 11, 1);
       expect(Dispatcher.dispatch).toBeCalledWith({

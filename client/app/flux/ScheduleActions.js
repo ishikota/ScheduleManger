@@ -15,6 +15,12 @@ var ScheduleActions = {
       }
     });
   },
+  changeFilter : function ( room_id, filter ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.FILTER,
+      data       : { room_id : room_id, filter : filter }
+    });
+  },
   fetchDateInfo : function ( room_id, date, filter ) {
     Dispatcher.dispatch({
       actionType : ScheduleConstants.FETCH_DATE,

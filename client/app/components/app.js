@@ -11,6 +11,9 @@ Dispatcher.register( function ( payload ) {
     case ScheduleConstants.ORDER_CALENDAR:
       ScheduleStore.changeCalendar( payload.data );
       break;
+    case ScheduleConstants.FILTER:
+      ScheduleStore.changeFilter( payload.data );
+      break;
     case ScheduleConstants.FETCH_DATE:
       ScheduleStore.fetchDateInfo(payload.data);
       break;
@@ -30,6 +33,7 @@ var App = React.createClass({
       this.setState( { cal_data : data } );
     }.bind(this));
     ScheduleStore.receivePanelData(function( data ){
+      console.log("receive new panel : "+JSON.stringify(data));
       this.setState( { panel_data : data } );
     }.bind(this));
   },
@@ -71,7 +75,7 @@ var App = React.createClass({
             <Calendar year={y} month={m} status={st}/>
           </div>
           <div className="col-xs-12 col-sm-5">
-            <SchedulePanel/>
+            <SchedulePanel data={pd} />
           </div>
         </div>
       </div>

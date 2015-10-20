@@ -1,4 +1,5 @@
 jest.dontMock('../client/app/components/schedule_panel')
+jest.dontMock('../client/app/fake_data');
 
 describe( 'Panel component', function () {
   var React  = require('react/addons');
@@ -7,22 +8,28 @@ describe( 'Panel component', function () {
   var PanelHeader = require('../client/app/components/panel_head');
   var PanelBody   = require('../client/app/components/panel_body');
   var TestUtils   = React.addons.TestUtils;
+  var FakeData    = require('../client/app/fake_data');
 
   describe( 'display content', function () {
-    var subject;
+    var subject, data;
 
     beforeEach( function () {
+      data = FakeData.PANEL2();
       subject = TestUtils.renderIntoDocument(
-        <SchedulePanel/>
+        <SchedulePanel data={data} />
         );
     });
 
-    it ( 'should display correct menu', function () {
+    it ( 'should pass props to child', function () {
       var panel = TestUtils.scryRenderedComponentsWithType(subject, Panel);
-      expect(panel[0].props.menu[0].title).toBe("default");
-      expect(panel[0].props.menu[1].title).toBe("menu1");
-      expect(panel[0].props.menu[2].title).toBe("menu2");
-      expect(panel[0].props.menu[3].title).toBe("menu3");
+      expect(panel[0].props.data).toEqual(data);
+      expect(panel[0].props.menu).toEqual(
+        [
+          { id : 1 , title : "Filter-1"   },
+          { id : 0 , title : "Filter-All" },
+          { id : 2 , title : "Filter-2"   },
+          { id : 3 , title : "Filter-3"   }
+        ]);
     });
   });
 });

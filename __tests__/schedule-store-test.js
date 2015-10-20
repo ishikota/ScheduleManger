@@ -25,6 +25,18 @@ describe( 'ScheduleStore', function () {
            filter : 1,
            status : FakeData.CALENDAR.status } );
     });
+
+    it( 'should change filter', function () {
+      ScheduleStore.changeFilter( { room_id : 0, filter : 2 } );
+      expect(ScheduleStore.room_data[0].calendar).toEqual(
+        {  date : {
+             year  : 2015,
+             month : 7,
+             day   : 31 },
+           filter : 2,
+           status : FakeData.CALENDAR.status  });
+    });
+
   });
 
   describe( 'emit change when Action received', function () {
@@ -40,6 +52,11 @@ describe( 'ScheduleStore', function () {
       expect(mockFunc).toBeCalled();
     });
 
+    it( "shold call mockFunc as callback", function () {
+      ScheduleStore.changeFilter( { room_id : 0, filter : 0 } );
+      expect(mockFunc).toBeCalled();
+    });
+
     it ( "provide current store state", function () {
       var cal  = ScheduleStore.room_data[0].calendar,
           clbk = jest.genMockFunction(),
@@ -50,10 +67,9 @@ describe( 'ScheduleStore', function () {
       ScheduleStore.receiveCalendarData(clbk);
       expect(clbk).lastCalledWith(expected);
       ScheduleStore.receivePanelData(clbk);
-      expect(clbk).lastCalledWith(FakeData.PANEL);
+      //expect(clbk).lastCalledWith(FakeData.PANEL1);
     });
 
   });
-
 
 });

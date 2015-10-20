@@ -3,7 +3,7 @@ var React = require('react');
 var PanelMedia = React.createClass({
   propTypes : {
     msg      : React.PropTypes.string.isRequired,
-    avtr_ids : React.PropTypes.array.isRequired
+    avtr     : React.PropTypes.array.isRequired
   },
   genIconPath : function (id) {
     switch( id ) {
@@ -12,8 +12,8 @@ var PanelMedia = React.createClass({
     }
   },
   renderAvatars : function () {
-    return this.props.avtr_ids.map( function ( id, i ) {
-      return <img key={i} className="avtr img-circle" src={this.genIconPath(id)}/>;
+    return this.props.avtr.map( function ( info, i ) {
+      return <img key={i} className="avtr img-circle" src={this.genIconPath(info.icon)}/>;
     }.bind(this));
   },
   render : function () {

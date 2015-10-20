@@ -1,37 +1,31 @@
 var React = require('react');
 var Panel = require('./panel');
 
-/* Fake data */
-var data = [
-      [  { msg : "media1", avtr_ids : [0,0,0,0]         },
-         { msg : "media2", avtr_ids : [0,1]             },
-         { msg : "media3", avtr_ids : [1]               }  ],
-      [  { msg : "media1", avtr_ids : [1,0,0]           },
-         { msg : "media3", avtr_ids : [1,1]             }  ],
-      [  { msg : "media1", avtr_ids : [0,1,1,0,0,1,1,0] },
-         { msg : "media2", avtr_ids : [0,1,1,1,1,1]     },
-         { msg : "media3", avtr_ids : [1,1,1]           }  ],
-      [  { msg : "media1", avtr_ids : [1,0,0]           }  ]
-    ];
-
 var SchedulePanel = React.createClass({
-  getInitialState : function () {
-    return { 
-      menu : [
-        { id : 0, title : "default", fetch_data : this.fetchData(0) },
-        { id : 1, title : "menu1"  , fetch_data : this.fetchData(1) },
-        { id : 2, title : "menu2"  , fetch_data : this.fetchData(2) },
-        { id : 3, title : "menu3"  , fetch_data : this.fetchData(3) } ]
-    };
-  },
   render : function () {
-    return <Panel menu={this.state.menu} />;
+    return (
+      <Panel menu={this.swapMenu(this.props.data, this.menu)} 
+             data={this.props.data} />
+             );
   },
-  fetchData : function ( flg ) {
-    return function() {
-      return data[flg];
-    };
-  }
+  swapMenu : function ( data, menu ) {
+    var ordered_menu = [];
+    for ( var i=0; i< menu.length; i++ ) {
+      var tmp = { id : menu[i].id, title : menu[i].title };
+      if ( i != data.filter ) {
+        ordered_menu.push(tmp);
+      } else {
+        ordered_menu.unshift(tmp);
+      }
+    }
+    return ordered_menu;
+  },
+  menu : [
+    { id : 0 , title : "Filter-All" },
+    { id : 1 , title : "Filter-1"   },
+    { id : 2 , title : "Filter-2"   },
+    { id : 3 , title : "Filter-3"   }
+  ]
 });
 
 module.exports = SchedulePanel;

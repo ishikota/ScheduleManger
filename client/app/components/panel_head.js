@@ -1,10 +1,11 @@
 var React      = require('react');
+var ScheduleActions = require('../flux/ScheduleActions');
 
 /*
- * prop format
+ * prop format ( passed menu is listed by the same order in arguments array ).
  * menu : 
- *   [ /default menu/ { title : ... , callback : ... } , 
- *     /menu1/        { title : ... , callback : ... },
+ *   [ /selected menu  / { id : 0, title : ... },
+ *     /dropdown menu1 / { id : 2, title : ... },
  *     ...
  *    ]
  *
@@ -13,11 +14,6 @@ var PanelHeader = React.createClass({
   propTypes : {
     menu : React.PropTypes.array.isRequired
   },
-  getInitialState : function () {
-       return {
-         selected_idx : 0
-       };
-  },
   render : function () {
     return (
     <div className="panel panel-info">
@@ -25,7 +21,7 @@ var PanelHeader = React.createClass({
         <div className="dropdown">
           <button className="btn btn-primary" type="button" data-toggle="dropdown">
             <span className="caret left"></span>
-            {this.getSelectedMenuTitle()}
+            {this.props.menu[0].title}
           </button>
           <ul className="dropdown-menu">
             {this.genMenu()}
@@ -35,15 +31,9 @@ var PanelHeader = React.createClass({
     </div>
       );
   },
-  getSelectedMenuTitle : function () {
-    return this.props.menu[this.state.selected_idx].title;
-  },
   genMenu : function () {
     return (
-      this.props.menu
-       .filter( function ( menu, i ) {
-         return i != this.state.selected_idx;
-       }.bind(this))
+      this.props.menu.slice(1)
        .map( function ( menu, i ) {
          return (
            <li key={i} className="panel-menu-item"
@@ -55,8 +45,10 @@ var PanelHeader = React.createClass({
   },
   handleClick : function ( menu ) {
     return function ( ev ) {
-      this.setState( { selected_idx : menu.id } );
-      menu.callback(menu.id);
+      //this.setState( { selected_idx : menu.id } );
+      //menu.callback(menu.id);
+      console.log("change filter called "+JSON.stringify(menu));
+      ScheduleActions.changeFilter(0, menu.id);
     };
   }
 });

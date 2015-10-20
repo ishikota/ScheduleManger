@@ -10,8 +10,10 @@ module.exports = {
       0,0,1 ]
   },
 
-  PANEL : {
+  PANEL1 : function () {
+    return {
     summary : "Max 6 people attends",
+    filter  : 0,
     date    : null,
     data    : [
       { msg : "10/18 6 people attends",
@@ -35,4 +37,25 @@ module.exports = {
             { id : 4, name : "Mukami" , icon : 1 } ] }
     ]
   }
+           },
+
+  PANEL2 : function () {
+    return {
+    summary : "Max 3 people attends",
+    filter  : 1,
+    date    : null,
+    data    : [
+      { msg : "10/12 3 people attends",
+        avtr :
+          [ { id : 1, name : "Ben"    , icon : 1 },
+            { id : 4, name : "Mukami" , icon : 1 },
+            { id : 5, name : "Roy"    , icon : 1 } ] },
+      { msg : "10/4 2 people attends",
+        avtr :
+          [ { id : 3, name : "Mary"   , icon : 0 },
+            { id : 4, name : "Mukami" , icon : 1 } ] }
+    ]
+  }
+           }
+
 }
