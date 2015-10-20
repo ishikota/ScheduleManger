@@ -11,11 +11,16 @@ describe( 'flux architecture for schedule data flow', function () {
   describe( 'send collect data to dispatcher', function () {
     var dummyDate = new Date(2015,9,31);
 
-    it ( "should dispatch FetchDateInfo request", function () {
-      ScheduleActions.fetchDateInfo(0, dummyDate, 0);
+    it ( "should dispatch orderCalendar request", function () {
+      ScheduleActions.orderCalendar( 1, 2015, 9, 31, 0 );
       expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.FETCH_DATE,
-        data       : { room_id : 0, date : dummyDate, filter : 0}
+        actionType : ScheduleConstants.ORDER_CALENDAR,
+        data       : 
+          { room_id : 1,
+            date    : { year  : 2015,
+                        month : 9,
+                        day   : 31   },
+            filter : 0 }
       });
     });
 

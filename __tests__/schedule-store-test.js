@@ -1,12 +1,31 @@
 jest.dontMock('../client/app/flux/ScheduleStore')
+jest.dontMock('../client/app/fake_data');
 
 describe( 'ScheduleStore', function () {
   var React     = require('react/addons');
   var TestUtils = React.addons.TestUtils;
-  var Dispatcher = require('../client/app/flux/Dispatcher');
-  var ScheduleActions = require('../client/app/flux/ScheduleActions');
-  var ScheduleConstants = require('../client/app/flux/ScheduleConstants');
   var ScheduleStore = require('../client/app/flux/ScheduleStore');
+  var FakeData  = require('../client/app/fake_data');
+
+  describe ( 'basic function', function () {
+    it( 'should change calendar state', function () {
+      ScheduleStore.changeCalendar( 
+        { room_id : 0,
+          date : {
+           year  : 2015,
+           month : 7,
+           day   : 31
+          },
+          filter : 1     });
+      expect(ScheduleStore.room_data[0].calendar).toEqual(
+        {  date : {
+             year  : 2015,
+             month : 7,
+             day   : 31 },
+           filter : 1,
+           status : FakeData.CALENDAR.status } );
+    });
+  });
 
   describe( 'emit change when Action received', function () {
     var mockFunc;
@@ -17,10 +36,24 @@ describe( 'ScheduleStore', function () {
     });
 
     it( "shold call mockFunc as callback", function () {
-      ScheduleStore.fetchDateInfo({});
+      ScheduleStore.changeCalendar(FakeData.CALENDAR);
       expect(mockFunc).toBeCalled();
     });
 
+    it ( "provide current store state", function () {
+      var cal  = ScheduleStore.room_data[0].calendar,
+          clbk = jest.genMockFunction(),
+          expected = { 
+            date   : { year : cal.date.year, month : cal.date.month},
+            status : cal.status
+          };
+      ScheduleStore.receiveCalendarData(clbk);
+      expect(clbk).lastCalledWith(expected);
+      ScheduleStore.receivePanelData(clbk);
+      expect(clbk).lastCalledWith(FakeData.PANEL);
+    });
+
   });
+
 
 });

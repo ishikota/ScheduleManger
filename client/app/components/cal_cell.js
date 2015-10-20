@@ -27,7 +27,7 @@ var CalCell = React.createClass({
   },
   handleClick : function (ev) {
     this.setState( { selected : !this.state.selected } );
-    ScheduleActions.fetchDateInfo(0,0,0);
+    ScheduleActions.orderCalendar(-1, -1, -1, this.props.val, -1);
   }
 });
 

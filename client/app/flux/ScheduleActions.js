@@ -2,6 +2,19 @@ var Dispatcher        = require("./Dispatcher");
 var ScheduleConstants = require("./ScheduleConstants");
 
 var ScheduleActions = {
+  orderCalendar : function ( room_id, year, month, day, filter ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.ORDER_CALENDAR,
+      data       : { room_id : room_id,
+                     date : {
+                       year  : year,
+                       month : month,
+                       day   : day
+                     },
+                     filter : filter 
+      }
+    });
+  },
   fetchDateInfo : function ( room_id, date, filter ) {
     Dispatcher.dispatch({
       actionType : ScheduleConstants.FETCH_DATE,

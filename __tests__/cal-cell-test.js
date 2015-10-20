@@ -6,9 +6,36 @@ describe( 'Calendar Cell component', function () {
   var TestUtils = React.addons.TestUtils;
   var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
-  describe( 'renderIntoDocument', function () {
-    xit ( 'should render the component', function () {
-      TestUtils.renderIntoDocument(<CalCell />);
+  describe( 'render into body', function () {
+    var subject, tb, row;
+    beforeEach( function () {
+      tb  = document.createElement("table");
+      row = document.createElement("row");
+      document.body.appendChild(tb);
+      tb.appendChild(row);
+      subject = React.render(
+        <CalCell val={2} status={1} />,
+        tb
+      );
+    });
+
+    afterEach( function () {
+      React.unmountComponentAtNode(tb);
+      tb.parentNode.removeChild(tb);
+    });
+
+    it ( 'should have passed status', function () {
+      expect(subject.props.status).toBe(1);
+      expect(subject.props.val).toBe(2);
+    });
+
+    it ( 'should change state and send action to store', function () {
+      spyOn(ScheduleActions, "orderCalendar");
+      subject.handleClick();
+      expect(ScheduleActions.orderCalendar).toHaveBeenCalledWith(-1,-1,-1,2,-1);
+      expect(subject.state.selected).toBe(true);
+      var td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
+      expect(td.className).toBe("cal-cell selected");
     });
   });
 
@@ -30,16 +57,6 @@ describe( 'Calendar Cell component', function () {
       expect(React.findDOMNode(calcell).textContent).toEqual("");
     });
 
-  });
-
-  describe( 'invoke callback directoly', function () {
-    xit ( 'should change state and send action to store', function () {
-      var subject = TestUtils.renderIntoDocument(<CalCell />);
-      subject.handleClick();
-      expect(subject.state.selected).toBe(true);
-      expect(ScheduleActions.fetchDateInfo.mock.calls.length).toBe(1);
-      console.log(subject);
-    });
   });
 
 

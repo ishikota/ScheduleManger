@@ -5,8 +5,9 @@ var CalRow  = require('./cal_row');
 var CalTable = React.createClass({
   propTypes : function () {
     return {
-      year  : React.PropTypes.number.isRequired,
-      month : React.PropTypes.number.isRequired
+      year   : React.PropTypes.number.isRequired,
+      month  : React.PropTypes.number.isRequired,
+      status : React.PropTypes.array.isRequired
     };
   },
   renderRows : function () {
@@ -17,7 +18,8 @@ var CalTable = React.createClass({
       lines  = this.getLines();
 
     for ( i=0; i<lines; i++ ) {
-      rows.push(<CalRow key={i} start={i*7-offset+1} end={end} />);
+      var status = this.props.status.slice(i*7, (i+1)*7);
+      rows.push(<CalRow key={i} start={i*7-offset+1} end={end} status={status}/>);
     }
     return rows;
   },
