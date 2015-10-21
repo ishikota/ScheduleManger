@@ -37,7 +37,7 @@ var PanelHeader = React.createClass({
        .map( function ( menu, i ) {
          return (
            <li key={i} className="panel-menu-item"
-                       onClick={this.handleClick(menu).bind(this)}>
+                       onClick={this.handleClick(menu)}>
              <a href="#">{menu.title}</a>
            </li>);
        }.bind(this))
@@ -45,10 +45,7 @@ var PanelHeader = React.createClass({
   },
   handleClick : function ( menu ) {
     return function ( ev ) {
-      //this.setState( { selected_idx : menu.id } );
-      //menu.callback(menu.id);
-      console.log("change filter called "+JSON.stringify(menu));
-      ScheduleActions.changeFilter(0, menu.id);
+      ScheduleActions.update({ filter : menu.id });
     };
   }
 });

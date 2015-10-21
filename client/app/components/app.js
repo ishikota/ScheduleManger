@@ -8,20 +8,8 @@ var ScheduleConstants = require("../flux/ScheduleConstants");
 
 Dispatcher.register( function ( payload ) {
   switch ( payload.actionType ) {
-    case ScheduleConstants.ORDER_CALENDAR:
+    case ScheduleConstants.UPDATE_CALENDAR:
       ScheduleStore.changeCalendar( payload.data );
-      break;
-    case ScheduleConstants.FILTER:
-      ScheduleStore.changeFilter( payload.data );
-      break;
-    case ScheduleConstants.FETCH_DATE:
-      ScheduleStore.fetchDateInfo(payload.data);
-      break;
-    case ScheduleConstants.FETCH_MONTH:
-      ScheduleStore.fetchMonthInfo(payload.data);
-      break;
-    case ScheduleConstants.UPDATE:
-      SchduleStore.updateSchedule(payload.data);
       break;
   }
 });
@@ -54,18 +42,17 @@ var App = React.createClass({
   },
   render : function () {
     var cd = this.state.cal_data,
-        y, m, st, pd;
+        pd = this.state.panel_data,
+        y, m, st;
 
     // yet loaded calendar data
     if ( !cd ) {
       return <div className='app' />
     }
 
-    cd = this.state.cal_data,
-    y  = cd.date.year,
-    m  = cd.date.month,
-    st = cd.status,
-    pd = this.state.panel_data;
+    y  = cd.date.year;
+    m  = cd.date.month;
+    st = cd.status;
 
     return (
       <div className='app'>

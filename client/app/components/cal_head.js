@@ -1,11 +1,11 @@
 var React   = require('react');
+var ScheduleActions = require('../flux/ScheduleActions');
 
 var CalHeader = React.createClass({
   propTypes : function () {
     return {
       year  : React.PropTypes.number.isRequired,
-      month : React.PropTypes.number.isRequired,
-      onChange : React.PropTypes.func
+      month : React.PropTypes.number.isRequired
     };
   },
   render : function () {
@@ -22,10 +22,12 @@ var CalHeader = React.createClass({
         );
   },
   handleClick : function (ev) {
-    if ( this.props.onChange ) {
-      var forward_month = ev.target.className.indexOf('next') > -1;
-      this.props.onChange( forward_month );
-    }
+    var 
+      date = new Date(this.props.year, this.props.month),
+      forward_month = ev.target.className.indexOf('next') > -1,
+      alpha         = forward_month ? 1 : -1;
+    date.setMonth( date.getMonth() + alpha );
+    ScheduleActions.update( { year : date.getFullYear(), month : date.getMonth() } );
   },
   parseMonth : function ( month ) {
     var names = ["January", "February", "March", "April", "May", "June",

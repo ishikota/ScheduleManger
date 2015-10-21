@@ -42,7 +42,7 @@ describe( 'PanelHead component', function () {
           );
         expect(targets.length).toBe(3);
         TestUtils.Simulate.click(targets[2]);
-        expect(ScheduleActions.changeFilter.mock.calls[0]).toEqual([0,3]);
+        expect(ScheduleActions.update.mock.calls[0][0]).toEqual({ filter:3});
       });
       
     });

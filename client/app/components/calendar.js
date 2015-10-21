@@ -13,36 +13,30 @@ var Calendar = React.createClass({
   },
   getInitialState : function () {
     return {
-      date   : new Date(this.props.year, this.props.month),
+      year   : this.props.year,
+      month  : this.props.month,
       status : this.props.status
     };
   },
   componentWillReceiveProps : function (nextProps) {
     this.setState( {
-      date   : new Date(nextProps.year, nextProps.month),
+      year   : nextProps.year,
+      month  : nextProps.month,
       status : nextProps.status
     });
   },
   render : function () {
     var
-      month = this.state.date.getMonth(),
-      year  = this.state.date.getFullYear();
+      year  = this.state.year,
+      month = this.state.month;
 
     return (
         <div className="cal-container">
-          <CalHeader year={year} month={month} onChange={this.handleChange} />
+          <CalHeader year={year} month={month} />
           <CalTable  year={year} month={month} status={this.state.status}/>
         </div>
         );
-  },
-  handleChange : function ( is_forward ) {
-    var alpha, new_month,
-        new_date = new Date(this.state.date),
-    alpha     = is_forward ? 1 : -1;
-    new_date.setMonth(new_date.getMonth() + alpha);
-    ScheduleActions.orderCalendar(
-        -1,new_date.getFullYear(), new_date.getMonth(), -1,-1);
-  },
+  }
 });
 
 module.exports = Calendar;

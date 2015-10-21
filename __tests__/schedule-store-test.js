@@ -7,63 +7,67 @@ describe( 'ScheduleStore', function () {
   var ScheduleStore = require('../client/app/flux/ScheduleStore');
   var FakeData  = require('../client/app/fake_data');
 
+  var calendar = { year:2015, month:9, day:31, filter:0, status:[] };
+
   describe ( 'basic function', function () {
-    it( 'should change calendar state', function () {
-      ScheduleStore.changeCalendar( 
-        { room_id : 0,
-          date : {
-           year  : 2015,
-           month : 7,
-           day   : 31
-          },
-          filter : 1     });
-      expect(ScheduleStore.room_data[0].calendar).toEqual(
-        {  date : {
-             year  : 2015,
-             month : 7,
-             day   : 31 },
-           filter : 1,
-           status : FakeData.CALENDAR.status } );
+    var before;
+    beforeEach( function () {
+      before = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].calendar));
+      ScheduleStore.room_data[0].calendar = JSON.parse(JSON.stringify(calendar));
+    });
+    afterEach( function () {
+      ScheduleStore.room_data[0].calendar = before;
     });
 
-    it( 'should change filter', function () {
-      ScheduleStore.changeFilter( { room_id : 0, filter : 2 } );
+    it( 'should update calendar state', function () {
+      // change only day
+      ScheduleStore.changeCalendar( { day : 7 } );
       expect(ScheduleStore.room_data[0].calendar).toEqual(
-        {  date : {
-             year  : 2015,
-             month : 7,
-             day   : 31 },
-           filter : 2,
-           status : FakeData.CALENDAR.status  });
+        { year:2015, month:9, day:7, filter:0, status:[] }
+      );
+      // change multiple property
+      ScheduleStore.changeCalendar( { year:1192, month:7, status:[1,2,3] } );
+      expect(ScheduleStore.room_data[0].calendar).toEqual(
+        { year:1192, month:7, day:7, filter:0, status:[1,2,3] }
+      );
+      // change filter
+      ScheduleStore.changeCalendar( { filter : 2 } );
+      expect(ScheduleStore.room_data[0].calendar).toEqual(
+        { year:1192, month:7, day:7, filter:2, status:[1,2,3] }
+      );
+
     });
 
   });
 
   describe( 'emit change when Action received', function () {
-    var mockFunc;
+    var before, mockFunc;
 
     beforeEach( function () {
       mockFunc = jest.genMockFunction();
+      before = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].calendar));
+      ScheduleStore.room_data[0].calendar = JSON.parse(JSON.stringify(calendar));
       ScheduleStore.addChangeListener(mockFunc);
     });
 
-    it( "shold call mockFunc as callback", function () {
-      ScheduleStore.changeCalendar(FakeData.CALENDAR);
-      expect(mockFunc).toBeCalled();
+    afterEach( function () {
+      ScheduleStore.removeChangeListener(mockFunc);
+      ScheduleStore.room_data[0].calendar = before;
     });
 
     it( "shold call mockFunc as callback", function () {
-      ScheduleStore.changeFilter( { room_id : 0, filter : 0 } );
+      ScheduleStore.changeCalendar({filter:0});
       expect(mockFunc).toBeCalled();
     });
 
-    it ( "provide current store state", function () {
+    it ( "should provide current store state", function () {
       var cal  = ScheduleStore.room_data[0].calendar,
           clbk = jest.genMockFunction(),
           expected = { 
-            date   : { year : cal.date.year, month : cal.date.month},
-            status : cal.status
+            date   : { year : 2015 , month : 9},
+            status : [1,2,3]
           };
+      spyOn(ScheduleStore, "calcStatus").andReturn(expected.status);
       ScheduleStore.receiveCalendarData(clbk);
       expect(clbk).lastCalledWith(expected);
       ScheduleStore.receivePanelData(clbk);

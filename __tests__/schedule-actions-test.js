@@ -12,40 +12,10 @@ describe( 'flux architecture for schedule data flow', function () {
     var dummyDate = new Date(2015,9,31);
 
     it ( "should dispatch orderCalendar request", function () {
-      ScheduleActions.orderCalendar( 1, 2015, 9, 31, 0 );
+      ScheduleActions.update( { year:2015, month:9, day:31, filter:0 } );
       expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.ORDER_CALENDAR,
-        data       : 
-          { room_id : 1,
-            date    : { year  : 2015,
-                        month : 9,
-                        day   : 31   },
-            filter : 0 }
-      });
-    });
-
-    it ( "should dispatch changeFilter request", function () {
-      ScheduleActions.changeFilter( 1, 2);
-      expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.FILTER,
-        data : { room_id : 1 , filter : 2 }
-      });
-    });
-
-    it ( "should dispatch FetchMonthInfo request", function () {
-      ScheduleActions.fetchMonthInfo(0, 11, 1);
-      expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.FETCH_MONTH,
-        data       : { room_id : 0, month : 11, filter : 1 }
-      });
-    });
-
-    it ( "should dispatch Update request", function () {
-      var fakeData = { fake : "data" };
-      ScheduleActions.update( 1, 2, dummyDate, fakeData );
-      expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.UPDATE,
-        data       : { room_id : 1, person_id : 2, date : dummyDate, data : fakeData }
+        actionType : ScheduleConstants.UPDATE_CALENDAR,
+        data       : { year:2015, month:9, day:31, filter:0 }
       });
     });
   });

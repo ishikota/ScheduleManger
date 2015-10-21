@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var events = require("events");
 var CHANGE_EVENT = "changeEvent";
 var FakeData = require("../fake_data");
@@ -9,9 +10,12 @@ var ScheduleStore = function() {
   var now = new Date();
   this.room_data[0] = {
     calendar : { 
-                 date : { year : now.getFullYear() , month : now.getMonth(), day : now.getDay()},
+                 year   : now.getFullYear(),
+                 month  : now.getMonth(),
+                 day    : now.getDay(),
                  filter : 0 ,
-                 status: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] }
+                 status : [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ] }
   };
 };
 
@@ -32,6 +36,29 @@ ScheduleStore.prototype.removeChangeListener = function(callback) {
 
 
 // Schedule-specific methods
+// emit change methods
+ScheduleStore.prototype.changeCalendar = function ( data ) {
+  console.log("chca "+JSON.stringify(data));
+  _.extend(this.room_data[0].calendar, data);
+  console.log("data: "+JSON.stringify(this.room_data[0]));
+  this.emitChange();
+}
+
+// API methods
+ScheduleStore.prototype.receiveCalendarData = function(callback) {
+  var fake_room = 0;
+  var cal = this.room_data[fake_room].calendar,
+      st = this.calcStatus(fake_room, cal.year, cal.month, cal.day, cal.filter),
+      data = {
+        date : { year : cal.year, month : cal.month },
+        status : st 
+      };
+  callback(data);
+}
+
+ScheduleStore.prototype.receivePanelData = function(callback) {
+  callback(this.calcSchedule());
+}
 
 // business logic method
 ScheduleStore.prototype.calcStatus = function ( room_id,y,m,d,f ) {
@@ -49,69 +76,6 @@ ScheduleStore.prototype.calcSchedule = function ( people_id ) {
   return panel;
 }
 
-// API methods
-ScheduleStore.prototype.fetchDateInfo = function(data) {
-  console.log("TODO: fire XHR to persist survey, then invoke this.emitChange() after the XHR has completed.");
-
-  this.emitChange();
-}
-
-ScheduleStore.prototype.fetchMonthInfo = function(id) {
-  console.log("TODO: delete survey", id);
-
-  this.emitChange();
-}
-
-ScheduleStore.prototype.updateSchedule = function(results) {
-  console.log("TODO: record the survey results", results);
-
-  this.emitChange();
-}
-
-ScheduleStore.prototype.changeCalendar = function ( data ) {
-  console.log("changecal "+JSON.stringify(data));
-  var
-    room_id  = data.room_id > 0 ? data.room_id : 0,
-    calendar = this.room_data[room_id].calendar,
-    y = data.date.year   >  0 ? data.date.year   : calendar.date.year,
-    m = data.date.month  >= 0 ? data.date.month  : calendar.date.month,
-    d = data.date.day    >  0 ? data.date.day    : calendar.date.day,
-    f = data.filter      >= 0 ? data.filter      : calendar.filter,
-    status = this.calcStatus(room_id,y,m,d,f);
-
-  this.room_data[room_id].calendar = 
-  {
-    date   : { year : y, month : m, day : d },
-    filter : f,
-    status : status
-  };
-  console.log("changecla after "+JSON.stringify(this.room_data[room_id].calendar));
-  this.emitChange();
-}
-
-ScheduleStore.prototype.changeFilter = function ( data ) {
-  this.room_data[data.room_id].calendar.filter = data.filter;
-  this.emitChange();
-}
-
-ScheduleStore.prototype.receiveCalendarData = function(callback) {
-  var fake_room = 0;
-  var cal = this.room_data[fake_room].calendar,
-      y  = cal.date.year,
-      m  = cal.date.month,
-      d  = cal.date.d,
-      f  = cal.filter,
-      st = this.calcStatus(fake_room,y,m,d,f),
-      data = {
-        date : { year : y, month : m },
-        status : st 
-      };
-  callback(data);
-}
-
-ScheduleStore.prototype.receivePanelData = function(callback) {
-  callback(this.calcSchedule());
-}
 
 // The ScheduleStore is a singleton, so export only the one instance.
 module.exports = new ScheduleStore();

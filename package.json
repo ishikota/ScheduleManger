@@ -16,7 +16,8 @@
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/underscore"
     ]
   },
   "author": "kota",
@@ -30,6 +31,7 @@
     "react-dom": "^0.14.0",
     "reactify": "^1.1.1",
     "uglify-js": "^2.5.0",
+    "underscore": "^1.8.3",
     "watchify": "^3.4.0"
   }
 }

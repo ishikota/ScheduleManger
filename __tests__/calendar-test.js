@@ -29,32 +29,4 @@ describe( 'Calendar Header component' , function () {
     });
 
   });
-
-  describe( 'handle controller click event', function () {
-    var subject;
-
-    beforeEach( function () {
-      var date = new Date(2015, 11);
-      subject = TestUtils.renderIntoDocument(
-        <Calendar year={date.getFullYear()} month={date.getMonth()} />
-        );
-    });
-
-    it ( 'should forward a month', function () {
-      /*var head  = TestUtils.scryRenderedComponentsWithType(subject, CalHeader),
-          table = TestUtils.scryRenderedComponentsWithType(subject, CalTable);
-      expect(head.length).toBe(1);
-      expect(table.length).toBe(1); */
-      subject.handleChange(true);
-      expect(ScheduleActions.orderCalendar.mock.calls[0]).toEqual([-1,2016,0,-1,-1]);
-    });
-    
-    it ( 'should backward a month', function () {
-      var target = ScheduleActions.orderCalendar.mock;
-      subject.handleChange(false);
-      expect(target.calls[target.calls.length-1]).toEqual([-1,2015,10,-1,-1]);
-    });
-
-  });
-
 });

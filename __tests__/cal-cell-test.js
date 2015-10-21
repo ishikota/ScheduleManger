@@ -30,9 +30,9 @@ describe( 'Calendar Cell component', function () {
     });
 
     it ( 'should change state and send action to store', function () {
-      spyOn(ScheduleActions, "orderCalendar");
+      spyOn(ScheduleActions, "update");
       subject.handleClick();
-      expect(ScheduleActions.orderCalendar).toHaveBeenCalledWith(-1,-1,-1,2,-1);
+      expect(ScheduleActions.update).toHaveBeenCalledWith({ date: { day:2 } });
       expect(subject.state.selected).toBe(true);
       var td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
       expect(td.className).toBe("cal-cell selected");
