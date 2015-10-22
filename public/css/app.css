@@ -16,6 +16,10 @@ th {
   color : rgba(0,0,0,0.54);
 }
 
+.main-header-btn-group {
+  padding : 8px;
+}
+
 .main-content {
 }
 
