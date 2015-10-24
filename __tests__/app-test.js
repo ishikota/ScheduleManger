@@ -49,6 +49,7 @@ describe( 'App component', function () {
     });
 
     it ( 'should update state', function () {
+      var dummy = { dummy : true };
       spyOn(ScheduleStore, "receiveCalendarData").andCallFake(
         function ( callback ) {
           callback(FakeData.CALENDAR);
@@ -57,10 +58,15 @@ describe( 'App component', function () {
         function ( callback ) {
           callback(FakeData.PANEL);
         });
+      spyOn(ScheduleStore, "receiveEditInfo").andCallFake(
+        function ( callback ) {
+          callback( dummy );
+      });
 
       subject.handleChange();
       expect(subject.state.cal_data).toEqual(FakeData.CALENDAR);
       expect(subject.state.panel_data).toEqual(FakeData.PANEL);
+      expect(subject.state.edit_data).toEqual(dummy);
     });
   });
 

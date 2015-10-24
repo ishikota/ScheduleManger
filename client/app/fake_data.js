@@ -55,7 +55,17 @@ module.exports = {
           [ { id : 3, name : "Mary"   , icon : 0 },
             { id : 4, name : "Mukami" , icon : 1 } ] }
     ]
+    }
+  },
+
+  ROOM_STATUS : function () {
+    return [ 0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,
+             0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0 ] 
+  },
+
+  PERSONAL_STATUS : function () {
+    return [ 0,0,1,0,0,0,1,1,0,0,1,1,0,0,0,0,
+             0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0 ] 
   }
-           }
 
 }

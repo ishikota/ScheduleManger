@@ -18,6 +18,15 @@ describe( 'flux architecture for schedule data flow', function () {
         data       : { year:2015, month:9, day:31, filter:0 }
       });
     });
+
+    it ( "should dispatch edit request", function () {
+      ScheduleActions.edit( { state : true } );
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.EDIT_CALENDAR,
+        data       : { state : true }
+      });
+    });
+
   });
 
 });

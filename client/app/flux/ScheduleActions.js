@@ -7,6 +7,12 @@ var ScheduleActions = {
       actionType : ScheduleConstants.UPDATE_CALENDAR,
       data       : data_map
     });
+  },
+  edit   : function ( state_map ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.EDIT_CALENDAR,
+      data       : state_map
+    });
   }
 }
 

@@ -9,13 +9,20 @@ var ScheduleStore = function() {
   // make default dev room
   var now = new Date();
   this.room_data[0] = {
+    state    : {
+      editing : false
+    },
+    account  : {
+      id : -1,
+      name : null
+    },
     calendar : { 
-                 year   : now.getFullYear(),
-                 month  : now.getMonth(),
-                 day    : now.getDay(),
-                 filter : 0 ,
-                 status : [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ] }
+      year   : now.getFullYear(),
+      month  : now.getMonth(),
+      day    : now.getDay(),
+      filter : 0 ,
+      status : [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ] }
   };
 };
 
@@ -44,11 +51,20 @@ ScheduleStore.prototype.changeCalendar = function ( data ) {
   this.emitChange();
 }
 
+ScheduleStore.prototype.changeState = function ( data ) {
+  console.log("chst "+JSON.stringify(data));
+  _.extend(this.room_data[0].state, data);
+  console.log("data: "+JSON.stringify(this.room_data[0]));
+  this.emitChange();
+}
+
+
 // API methods
 ScheduleStore.prototype.receiveCalendarData = function(callback) {
-  var fake_room = 0;
-  var cal = this.room_data[fake_room].calendar,
-      st = this.calcStatus(fake_room, cal.year, cal.month, cal.day, cal.filter),
+  var fake_room = 0,
+      id   = this.room_data[fake_room].state.editing ? 1 : 0,
+      cal  = this.room_data[fake_room].calendar,
+      st   = this.calcStatus(id, cal.year, cal.month, cal.day, cal.filter),
       data = {
         date : { year : cal.year, month : cal.month },
         status : st 
@@ -60,14 +76,22 @@ ScheduleStore.prototype.receivePanelData = function(callback) {
   callback(this.calcSchedule());
 }
 
+ScheduleStore.prototype.receiveEditInfo = function(callback) {
+  callback(this.calcEditInfo());
+}
+
 // business logic method
+
+/*
+ * room_id is 0           -> get room schedule status
+ * room_id is :id (not 0) -> get personal schedule status
+ * */
 ScheduleStore.prototype.calcStatus = function ( room_id,y,m,d,f ) {
-  var i, status = [];
-  for( i=0; i<31; i++ ) {
-    status.push(Math.round(Math.random()));
+  if ( room_id === 0 ) {
+    return FakeData.ROOM_STATUS();
+  } else {
+    return FakeData.PERSONAL_STATUS();
   }
-  //return status;
-  return FakeData.CALENDAR.status;
 }
 
 ScheduleStore.prototype.calcSchedule = function ( people_id ) {
@@ -75,6 +99,24 @@ ScheduleStore.prototype.calcSchedule = function ( people_id ) {
   panel.filter = this.room_data[0].calendar.filter;
   return panel;
 }
+
+ScheduleStore.prototype.calcEditInfo = function() {
+  var fill_dt = this.getFillDate();
+  return {
+    editing : this.room_data[0].state.editing,
+    numer   : fill_dt.numer,
+    denom   : fill_dt.denom
+  };
+}
+
+ScheduleStore.prototype.getFillDate = function () {
+  return { 
+    numer : Math.floor(Math.random()*11),
+    denom : Math.floor(Math.random()*11+11)
+  };
+}
+
+// db method ?
 
 
 // The ScheduleStore is a singleton, so export only the one instance.

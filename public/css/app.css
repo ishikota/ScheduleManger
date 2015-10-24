@@ -16,8 +16,37 @@ th {
   color : rgba(0,0,0,0.54);
 }
 
+.main-header {
+  margin-bottom : 0px;
+}
+
 .main-header-btn-group {
   padding : 8px;
+}
+
+.eh-txt {
+  margin-right : 16px;
+}
+
+.eh-mark {
+  margin-right : 4px;
+  width : 16px;
+  height : 16px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+
+.eh-mark.ok {
+  background : #3D5AFE;
+}
+
+.eh-mark.pend{
+  background : #FFA726;
+}
+
+.eh-mark.no {
+  background : #F44336;
 }
 
 .main-content {

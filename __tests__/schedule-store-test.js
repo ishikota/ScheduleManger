@@ -8,15 +8,19 @@ describe( 'ScheduleStore', function () {
   var FakeData  = require('../client/app/fake_data');
 
   var calendar = { year:2015, month:9, day:31, filter:0, status:[] };
+  var state = { editing : false };
 
   describe ( 'basic function', function () {
-    var before;
+    var before = {};
     beforeEach( function () {
-      before = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].calendar));
+      before.cal = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].calendar));
+      before.st  = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].state));
       ScheduleStore.room_data[0].calendar = JSON.parse(JSON.stringify(calendar));
+      ScheduleStore.room_data[0].state    = JSON.parse(JSON.stringify(state));
     });
     afterEach( function () {
-      ScheduleStore.room_data[0].calendar = before;
+      ScheduleStore.room_data[0].calendar = before.cal;
+      ScheduleStore.room_data[0].state    = before.st;
     });
 
     it( 'should update calendar state', function () {
@@ -35,7 +39,26 @@ describe( 'ScheduleStore', function () {
       expect(ScheduleStore.room_data[0].calendar).toEqual(
         { year:1192, month:7, day:7, filter:2, status:[1,2,3] }
       );
+    });
 
+    describe ('state around', function () {
+      it ( 'should update state', function () {
+        ScheduleStore.changeState( { editing : true } );
+        expect(ScheduleStore.room_data[0].state).toEqual(
+          { editing : true }
+        );
+      });
+      it ( 'should receive editInfo', function () {
+        spyOn(ScheduleStore, "getFillDate").andReturn(
+          { numer : 3, denom : 10 }
+        );
+        var mockFunc = jest.genMockFunction();
+        ScheduleStore.receiveEditInfo(mockFunc);
+        expect(mockFunc).toBeCalledWith({ editing : false, numer : 3, denom :10});
+        ScheduleStore.changeState( { editing : true } );
+        ScheduleStore.receiveEditInfo(mockFunc);
+        expect(mockFunc).toBeCalledWith({ editing : true, numer :3, denom : 10});
+      });
     });
 
   });
@@ -72,6 +95,42 @@ describe( 'ScheduleStore', function () {
       expect(clbk).lastCalledWith(expected);
       ScheduleStore.receivePanelData(clbk);
       //expect(clbk).lastCalledWith(FakeData.PANEL1);
+    });
+
+  });
+
+  describe( 'state property spec check', function () {
+    var mockFunc, before={};
+    beforeEach( function () {
+      mockFunc = jest.genMockFunction();
+      before.cal = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].calendar));
+      before.st  = JSON.parse(JSON.stringify(ScheduleStore.room_data[0].state));
+      ScheduleStore.room_data[0].calendar = JSON.parse(JSON.stringify(calendar));
+      ScheduleStore.room_data[0].state    = JSON.parse(JSON.stringify(state));
+    });
+    afterEach( function () {
+      ScheduleStore.room_data[0].calendar = before.cal;
+      ScheduleStore.room_data[0].state    = before.st;
+    });
+
+    it ( 'should get personal status', function () {
+      ScheduleStore.changeState( { editing : true } );
+      var expected = { 
+            date   : { year : 2015 , month : 9},
+            status : FakeData.PERSONAL_STATUS()
+          };
+      ScheduleStore.receiveCalendarData(mockFunc);
+      expect(mockFunc).lastCalledWith(expected);
+    });
+
+    it ( 'should get whole room status', function () {
+      ScheduleStore.changeState( { editing : false } );
+      var expected = { 
+            date   : { year : 2015 , month : 9},
+            status : FakeData.ROOM_STATUS()
+          };
+      ScheduleStore.receiveCalendarData(mockFunc);
+      expect(mockFunc).lastCalledWith(expected);
     });
 
   });
