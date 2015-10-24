@@ -38,7 +38,7 @@ var PanelHeader = React.createClass({
          return (
            <li key={i} className="panel-menu-item"
                        onClick={this.handleClick(menu)}>
-             <a href="#">{menu.title}</a>
+             <a>{menu.title}</a>
            </li>);
        }.bind(this))
     );

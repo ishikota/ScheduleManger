@@ -4,13 +4,14 @@ describe( 'App component', function () {
   var React         = require('react/addons');
   var TestUtils     = React.addons.TestUtils;
   var App           = require('../client/app/components/app');
+  var Welcome       = require('../client/app/components/welcome');
   var Dispatcher    = require('../client/app/flux/Dispatcher');
   var ScheduleStore = require('../client/app/flux/ScheduleStore');
   var FakeData      = require('../client/app/fake_data');
 
   describe( 'renderIntoDocument', function () {
     it ( 'should render the component', function () {
-      TestUtils.renderIntoDocument(<App/>);
+      TestUtils.renderIntoDocument(<App><Welcome/></App>);
     });
   });
 
@@ -19,7 +20,7 @@ describe( 'App component', function () {
     beforeEach( function () {
       memo_receive_cal   = ScheduleStore.receiveCalendarData.mock.calls.length;
       memo_receive_panel = ScheduleStore.receivePanelData.mock.calls.length;
-      subject = TestUtils.renderIntoDocument(<App/>);
+      subject = TestUtils.renderIntoDocument(<App><Welcome/></App>);
     });
 
     it ( 'should receive calendar/panel info in getInitialState()', function () {
@@ -35,7 +36,7 @@ describe( 'App component', function () {
 
     var subject, memo_receive_cal, memo_receive_panel;
     beforeEach( function () {
-      subject = TestUtils.renderIntoDocument(<App/>);
+      subject = TestUtils.renderIntoDocument(<App><Welcome/></App>);
       memo_receive_cal   = ScheduleStore.receiveCalendarData.mock.calls.length;
       memo_receive_panel = ScheduleStore.receivePanelData.mock.calls.length;
     });
@@ -66,7 +67,7 @@ describe( 'App component', function () {
       subject.handleChange();
       expect(subject.state.cal_data).toEqual(FakeData.CALENDAR);
       expect(subject.state.panel_data).toEqual(FakeData.PANEL);
-      expect(subject.state.edit_data).toEqual(dummy);
+      expect(subject.state.hint_data).toEqual(dummy);
     });
   });
 

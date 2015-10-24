@@ -1,9 +1,7 @@
 var React             = require("react");
 var MainHeader        = require("./main_header");
-var EditHint          = require("./edit_hint");
-var Calendar          = require("./calendar");
-var SchedulePanel     = require("./schedule_panel");
-var ScheduleStore      = require("../flux/ScheduleStore");
+var HintPanel         = require("./hint_panel");
+var ScheduleStore     = require("../flux/ScheduleStore");
 var Dispatcher        = require("../flux/Dispatcher");
 var ScheduleConstants = require("../flux/ScheduleConstants");
 
@@ -29,15 +27,15 @@ var App = React.createClass({
       this.setState( { panel_data : data } );
     }.bind(this));
     ScheduleStore.receiveEditInfo( function( data ){
-      console.log("receive new edit: "+JSON.stringify(data));
-      this.setState( { edit_data : data } );
+      console.log("receive new hint: "+JSON.stringify(data));
+      this.setState( { hint_data : data } );
     }.bind(this));
   },
   getInitialState : function () {
     return {
       cal_data   : null,
       panel_data : null,
-      edit_data  : { editing : false, numer : 0, denom : 100 }
+      hint_data  : { editing : false, numer : 0, denom : 100 }
     };
   },
   componentWillMount : function () {
@@ -53,28 +51,15 @@ var App = React.createClass({
     var cd = this.state.cal_data,
         pd = this.state.panel_data,
         ed = this.state.edit_data,
-        y, m, st;
+        y, m, st, mode;
 
-    // yet loaded calendar data
-    if ( !cd ) {
-      return <div className='app' />
-    }
-
-    y   = cd.date.year;
-    m   = cd.date.month;
-    st  = cd.status;
-
+    var mode = this.props.children.type.displayName == 'Main' ? 0 : 1;
     return (
       <div className='app'>
         <MainHeader/>
-        <EditHint numer={ed.numer} denom={ed.denom} visible={ed.editing} />
+        <HintPanel mode={mode} data={this.state.hint_data} />
         <div className="main-content container">
-          <div className="col-xs-12 col-sm-7">
-            <Calendar year={y} month={m} status={st}/>
-          </div>
-          <div className="col-xs-12 col-sm-5">
-            <SchedulePanel data={pd} />
-          </div>
+          { React.cloneElement(this.props.children, { data : this.state }) }
         </div>
       </div>
     );
