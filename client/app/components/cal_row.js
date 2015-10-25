@@ -6,7 +6,9 @@ var CalRow = React.createClass({
     return {
       start  : React.PropTypes.number.isRequired,
       end    : React.PropTypes.number,
-      status : React.PropTypes.array.isRequired
+      status : React.PropTypes.array.isRequired,
+      statelist : React.PropTypes.array.isRequired,
+      onClick   : React.PropTypes.func.isRequired
     };
   },
   getDefaultProps : function () {
@@ -22,7 +24,11 @@ var CalRow = React.createClass({
 
       day = this.validate(val) ? val : -1;
       status = this.props.status[i];
-      children.push( <CalCell val={day} key={val} status={status}/> );
+      children.push(
+          <CalCell val={day} key={val} status={status}
+                   statelist={this.props.statelist}
+                   onClick={this.props.onClick}/>
+          );
     }
 
     return <tr>{children}</tr>;

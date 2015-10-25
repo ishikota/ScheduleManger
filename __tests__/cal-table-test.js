@@ -9,10 +9,12 @@ describe( 'Calendar Table component', function () {
   var FakeData  = require('../client/app/fake_data');
 
   describe( 'basic spec check', function () {
-    var subject;
+    var subject,mockFunc;
     beforeEach( function () {
+      mockFunc = jest.genMockFunction();
       subject = TestUtils.renderIntoDocument(
-        <CalTable year={2015} month={1} status={FakeData.CALENDAR.status}/>
+        <CalTable year={2015} month={1} status={FakeData.CALENDAR.status}
+                  statelist={[1,2,3]} onClick={mockFunc}/>
       );
     });
     
@@ -23,6 +25,8 @@ describe( 'Calendar Table component', function () {
       expect(rows[1].props.status).toEqual(FakeData.CALENDAR.status.slice( 7,14));
       expect(rows[2].props.status).toEqual(FakeData.CALENDAR.status.slice(14,21));
       expect(rows[3].props.status).toEqual(FakeData.CALENDAR.status.slice(21,28));
+      expect(rows[0].props.statelist).toEqual([1,2,3]);
+      expect(rows[0].props.onClick).toEqual(mockFunc);
     });
 
   });

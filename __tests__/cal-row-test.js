@@ -8,13 +8,16 @@ describe( 'Calendar Row component', function () {
   var fake_status = [0,0,1,1,0,1,0];
 
   describe( 'basic spec check', function () {
-    var subject, el;
+    var subject, el, mockFunc;
 
     beforeEach( function () {
+      mockFunc = jest.genMockFunction();
       el = document.createElement("table");
       document.body.appendChild(el);
       subject = React.render(
-        <CalRow start={1} end={31} status={fake_status} />
+        <CalRow start={1} end={31} status={fake_status} 
+                statelist={[1,2,3]}
+                onClick={mockFunc}/>
         ,el
       );
     });
@@ -29,6 +32,8 @@ describe( 'Calendar Row component', function () {
       expect(cells.length).toBe(7);
       for ( var i=0; i<7 ; i++ ) {
         expect(cells[i].props.status).toBe(fake_status[i]);
+        expect(cells[i].props.statelist).toEqual([1,2,3]);
+        expect(cells[i].props.onClick).toEqual(mockFunc);
       }
     });
   });

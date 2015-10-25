@@ -80,15 +80,20 @@ th {
 
 .cal-cell {
   cursor : pointer;
-}
-
-.cal-cell.selected {
-  background : #3D5AFE;
   width : 32px;
   height : 32px;
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
+}
+
+.cal-cell.blue {
+  background : #3D5AFE;
+  color : #fff;
+}
+
+.cal-cell.red {
+  background : #FF0000;
   color : #fff;
 }
 

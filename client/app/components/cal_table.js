@@ -7,7 +7,9 @@ var CalTable = React.createClass({
     return {
       year   : React.PropTypes.number.isRequired,
       month  : React.PropTypes.number.isRequired,
-      status : React.PropTypes.array.isRequired
+      status : React.PropTypes.array.isRequired,
+      statelist : React.PropTypes.array.isRequired,
+      onClick   : React.PropTypes.func.isRequired
     };
   },
   renderRows : function () {
@@ -19,7 +21,11 @@ var CalTable = React.createClass({
 
     for ( i=0; i<lines; i++ ) {
       var status = this.props.status.slice(i*7, (i+1)*7);
-      rows.push(<CalRow key={i} start={i*7-offset+1} end={end} status={status}/>);
+      rows.push(
+        <CalRow key={i} start={i*7-offset+1} end={end} status={status}
+                statelist={this.props.statelist}
+                onClick={this.props.onClick}/>
+        );
     }
     return rows;
   },

@@ -6,28 +6,37 @@ var ScheduleActions = require('../flux/ScheduleActions');
  * So you should pass -1 when this cell should be empty.
  * */
 var CalCell = React.createClass({
-  propTypes: function () {
-    val   : React.PropTypes.number.isRequired
+  propTypes : {
+    val       : React.PropTypes.number.isRequired,
+    statelist : React.PropTypes.array.isRequired,
+    onClick   : React.PropTypes.func.isRequired
   },
   getInitialState: function () {
     return {
-      selected : false
+      click_count : 0
     };
   },
   render: function () {
     var valid, content, clazz;
     valid = this.validate( this.props.val );
     content = valid ? this.props.val : '';
-    clazz = "cal-cell"
-    clazz += this.state.selected ? " selected" : "";
+    clazz = this.getClass(this.state.click_count, this.props.statelist);
     return <td className={clazz} onClick={this.handleClick}>{content}</td>;
   },
   validate : function ( val ) {
     return val != -1;
   },
   handleClick : function (ev) {
-    this.setState( { selected : !this.state.selected } );
-    ScheduleActions.update( { date : { day : this.props.val } } );
+    this.setState( { click_count : this.state.click_count + 1 } );
+    this.props.onClick( { date : { day : this.props.val } } );
+  },
+  getClass : function ( click_count, state_list ) {
+    var
+      clazz  = 'cal-cell',
+      len    = state_list.length,
+      append = state_list[click_count%len];
+    if( append ) { clazz += ' '+append } // if not append is empty string
+    return clazz;
   }
 });
 

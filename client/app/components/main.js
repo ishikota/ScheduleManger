@@ -1,6 +1,7 @@
 var React = require('react');
 var Calendar          = require("./calendar");
 var SchedulePanel     = require("./schedule_panel");
+var ScheduleActions   = require("../flux/ScheduleActions");
 
 var Main = React.createClass({
   render : function () {
@@ -19,13 +20,18 @@ var Main = React.createClass({
     return (
       <div>
         <div className="col-xs-12 col-sm-7">
-          <Calendar year={y} month={m} status={st}/>
+          <Calendar year={y} month={m} status={st}
+                    statelist={this.colors} onClick={this.callback}/>
         </div>
         <div className="col-xs-12 col-sm-5">
           <SchedulePanel data={pd} />
         </div>
       </div>
     );
+  },
+  colors : ["", "blue", "red", "red"],
+  callback : function ( ev ) {
+    ScheduleActions.update( { date : { day : this.props.val } } );
   }
 });
 

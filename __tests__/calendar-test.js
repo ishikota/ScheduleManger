@@ -11,14 +11,12 @@ describe( 'Calendar Header component' , function () {
 
   describe( 'basic spec check', function () {
 
-    var subject;
-    beforeEach( function () {
-      subject = TestUtils.renderIntoDocument(
-        <Calendar year={2015} month={10} status={FakeData.CALENDAR.status}/>
-      );
-    });
-
     it ('should pass props to children', function () {
+      var mockFunc = jest.genMockFunction();
+      var subject = TestUtils.renderIntoDocument(
+        <Calendar year={2015} month={10} status={FakeData.CALENDAR.status}
+                statelist={[1,2,3]} onClick={mockFunc}/>
+      );
       var head  = TestUtils.scryRenderedComponentsWithType(subject, CalHeader)[0],
           table = TestUtils.scryRenderedComponentsWithType(subject, CalTable)[0];
       expect(head.props.year).toBe(2015);
@@ -26,7 +24,20 @@ describe( 'Calendar Header component' , function () {
       expect(table.props.year).toBe(2015);
       expect(table.props.month).toBe(10);
       expect(table.props.status).toEqual(FakeData.CALENDAR.status);
+      expect(table.props.statelist).toEqual([1,2,3]);
+      expect(table.props.onClick).toEqual(mockFunc);
     });
+
+    it ( 'should use default callback', function () {
+      var
+        subject = TestUtils.renderIntoDocument(
+          <Calendar year={2015} month={10} status={FakeData.CALENDAR.status}
+                statelist={[1,2,3]} />
+        ),
+        table = TestUtils.scryRenderedComponentsWithType(subject, CalTable)[0];
+      expect(table.props.onClick).toEqual(jasmine.any(Function));
+    });
+
 
   });
 });

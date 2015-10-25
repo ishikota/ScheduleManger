@@ -6,9 +6,16 @@ var ScheduleActions = require('../flux/ScheduleActions');
 var Calendar = React.createClass({
   propTypes : function () {
     return {
-      year   : React.PropTypes.number.isRequired,
-      month  : React.PropTypes.number.isRequired,
-      status : React.PropTypes.array.isRequired
+      year      : React.PropTypes.number.isRequired,
+      month     : React.PropTypes.number.isRequired,
+      status    : React.PropTypes.array.isRequired,
+      statelist : React.PropTypes.array.isRequired,
+      onClick   : React.PropTypes.func
+    };
+  },
+  getDefaultProps : function () {
+    return {
+      onClick : function ( ev ) { /* do nothing */}
     };
   },
   getInitialState : function () {
@@ -33,7 +40,9 @@ var Calendar = React.createClass({
     return (
         <div className="cal-container">
           <CalHeader year={year} month={month} />
-          <CalTable  year={year} month={month} status={this.state.status}/>
+          <CalTable  year={year} month={month} status={this.state.status}
+                     statelist={this.props.statelist}
+                     onClick={this.props.onClick} />
         </div>
         );
   }

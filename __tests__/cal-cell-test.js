@@ -7,14 +7,15 @@ describe( 'Calendar Cell component', function () {
   var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
   describe( 'render into body', function () {
-    var subject, tb, row;
+    var subject, tb, row, mockFunc;
     beforeEach( function () {
+      mockFunc = jest.genMockFunction();
       tb  = document.createElement("table");
       row = document.createElement("row");
       document.body.appendChild(tb);
       tb.appendChild(row);
       subject = React.render(
-        <CalCell val={2} status={1} />,
+        <CalCell val={2} status={1} statelist={["", "blue", "red"]} onClick={mockFunc}/>,
         tb
       );
     });
@@ -24,18 +25,28 @@ describe( 'Calendar Cell component', function () {
       tb.parentNode.removeChild(tb);
     });
 
-    it ( 'should have passed status', function () {
-      expect(subject.props.status).toBe(1);
-      expect(subject.props.val).toBe(2);
-    });
-
     it ( 'should change state and send action to store', function () {
+      var td;
       spyOn(ScheduleActions, "update");
+      expect(subject.state.click_count).toBe(0);
+      // click 1
       subject.handleClick();
-      expect(ScheduleActions.update).toHaveBeenCalledWith({ date: { day:2 } });
-      expect(subject.state.selected).toBe(true);
+      expect(mockFunc).toBeCalledWith({ date: { day:2 } });
+      expect(subject.state.click_count).toBe(1);
+      td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
+      expect(td.className).toEqual("cal-cell blue");
+      // click 2
+      subject.handleClick();
+      expect(subject.state.click_count).toBe(2);
+      td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
+      expect(td.className).toEqual("cal-cell red");
+      // click 3
+      subject.handleClick();
+      expect(subject.state.click_count).toBe(3);
+      td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
+      expect(td.className).toEqual("cal-cell");
+
       var td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
-      expect(td.className).toBe("cal-cell selected");
     });
   });
 
@@ -43,7 +54,7 @@ describe( 'Calendar Cell component', function () {
 
     it ( 'sets 2 on props.val', function () {
       var calcell = TestUtils.renderIntoDocument(
-        <table><tr><CalCell val="2"/></tr></table>
+        <table><tr><CalCell val="2" statelist={[""]} onClick={function(){}}/></tr></table>
       );
       expect(React.findDOMNode(calcell).textContent).toEqual("2");
     });
@@ -52,7 +63,7 @@ describe( 'Calendar Cell component', function () {
   describe( 'set invalid date when', function () {
     it ( 'sets -1 on props.val', function () {
       var calcell = TestUtils.renderIntoDocument(
-        <table><tr><CalCell val="-1"/></tr></table>
+        <table><tr><CalCell val="-1" statelist={[""]} onClick={function(){}}/></tr></table>
       );
       expect(React.findDOMNode(calcell).textContent).toEqual("");
     });
