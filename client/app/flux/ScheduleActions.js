@@ -2,16 +2,22 @@ var Dispatcher        = require("./Dispatcher");
 var ScheduleConstants = require("./ScheduleConstants");
 
 var ScheduleActions = {
-  update : function ( data_map ) {
+  updateCalendar : function ( data_map ) {
     Dispatcher.dispatch({
       actionType : ScheduleConstants.UPDATE_CALENDAR,
       data       : data_map
     });
   },
-  edit   : function ( state_map ) {
+  updateSchedule : function ( data_map ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.UPDATE_SCHEDULE,
+      data       : data_map
+    });
+  },
+  switchCalendar : function ( id ) {
     Dispatcher.dispatch({
       actionType : ScheduleConstants.EDIT_CALENDAR,
-      data       : state_map
+      data       : id
     });
   }
 }

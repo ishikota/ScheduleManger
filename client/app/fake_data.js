@@ -1,13 +1,31 @@
 module.exports = {
-  
-  CALENDAR : { 
-    date   : { year : 2015, month : 9 },
-    status : [ 
-      0,1,1,0,0,0,1,
-      0,1,0,0,0,1,0,
-      0,0,0,1,0,0,1,
-      1,0,1,0,0,0,0,
-      0,0,1 ]
+
+  getEventData : function () {
+    return this.EVENT_DATA();
+  },
+  getPersonalData : function ( id ) {
+    switch ( id ) {
+      case 1: return this.KOTA_DATA();
+    }
+    return this.KOTA_DATA();
+  },
+
+  EVENT_DATA : function () { 
+    var sched = [];
+    sched[9] = [ 0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,
+                 0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0 ];
+    return { schedule : sched }
+  },
+
+  KOTA_DATA : function () {
+    var sched = [];
+    sched[9] = [ 0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,
+                 0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0 ];
+    return {
+      id   : 1,
+      name : "Kota",
+      schedule : sched
+    }
   },
 
   PANEL1 : function () {
@@ -57,15 +75,5 @@ module.exports = {
     ]
     }
   },
-
-  ROOM_STATUS : function () {
-    return [ 0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,
-             0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0 ] 
-  },
-
-  PERSONAL_STATUS : function () {
-    return [ 0,0,1,0,0,0,1,1,0,0,1,1,0,0,0,0,
-             0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0 ] 
-  }
 
 }

@@ -59,7 +59,7 @@ describe( 'App component', function () {
         function ( callback ) {
           callback(FakeData.PANEL);
         });
-      spyOn(ScheduleStore, "receiveEditInfo").andCallFake(
+      spyOn(ScheduleStore, "receiveInputState").andCallFake(
         function ( callback ) {
           callback( dummy );
       });
@@ -67,7 +67,7 @@ describe( 'App component', function () {
       subject.handleChange();
       expect(subject.state.cal_data).toEqual(FakeData.CALENDAR);
       expect(subject.state.panel_data).toEqual(FakeData.PANEL);
-      expect(subject.state.hint_data).toEqual(dummy);
+      expect(subject.state.input_state).toEqual(dummy);
     });
   });
 

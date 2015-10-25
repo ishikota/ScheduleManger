@@ -16,7 +16,7 @@ var HintPanel = React.createClass({
                   denom={dt.denom} 
                   visible={dt.editing} />
       case 1:
-        return <WelcomeHint/>
+        return <WelcomeHint data={this.props.data} />
     }
   }
 });

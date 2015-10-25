@@ -14,7 +14,7 @@ describe( 'Calendar Header component' , function () {
     it ('should pass props to children', function () {
       var mockFunc = jest.genMockFunction();
       var subject = TestUtils.renderIntoDocument(
-        <Calendar year={2015} month={10} status={FakeData.CALENDAR.status}
+        <Calendar year={2015} month={10} status={FakeData.getEventData()}
                 statelist={[1,2,3]} onClick={mockFunc}/>
       );
       var head  = TestUtils.scryRenderedComponentsWithType(subject, CalHeader)[0],
@@ -23,7 +23,7 @@ describe( 'Calendar Header component' , function () {
       expect(head.props.month).toBe(10);
       expect(table.props.year).toBe(2015);
       expect(table.props.month).toBe(10);
-      expect(table.props.status).toEqual(FakeData.CALENDAR.status);
+      expect(table.props.status).toEqual(FakeData.getEventData());
       expect(table.props.statelist).toEqual([1,2,3]);
       expect(table.props.onClick).toEqual(mockFunc);
     });
@@ -31,7 +31,7 @@ describe( 'Calendar Header component' , function () {
     it ( 'should use default callback', function () {
       var
         subject = TestUtils.renderIntoDocument(
-          <Calendar year={2015} month={10} status={FakeData.CALENDAR.status}
+          <Calendar year={2015} month={10} status={FakeData.getEventData()}
                 statelist={[1,2,3]} />
         ),
         table = TestUtils.scryRenderedComponentsWithType(subject, CalTable)[0];

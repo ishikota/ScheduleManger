@@ -27,21 +27,23 @@ describe( 'Calendar Cell component', function () {
 
     it ( 'should change state and send action to store', function () {
       var td;
-      spyOn(ScheduleActions, "update");
+      spyOn(ScheduleActions, "updateCalendar");
       expect(subject.state.click_count).toBe(0);
       // click 1
       subject.handleClick();
-      expect(mockFunc).toBeCalledWith({ date: { day:2 } });
+      expect(mockFunc).toBeCalledWith({ day:2, next_state:1});
       expect(subject.state.click_count).toBe(1);
       td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
       expect(td.className).toEqual("cal-cell blue");
       // click 2
       subject.handleClick();
+      expect(mockFunc).toBeCalledWith({ day:2, next_state:2});
       expect(subject.state.click_count).toBe(2);
       td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
       expect(td.className).toEqual("cal-cell red");
       // click 3
       subject.handleClick();
+      expect(mockFunc).toBeCalledWith({ day:2, next_state:0});
       expect(subject.state.click_count).toBe(3);
       td = TestUtils.scryRenderedDOMComponentsWithTag(subject, "td")[0];
       expect(td.className).toEqual("cal-cell");

@@ -1,12 +1,23 @@
 var React = require('react');
+var MainHeadBtn     = require('./main_head_btn');
+var WelcomeBtn      = require('./welcome_head_btn');
 var ScheduleActions = require('../flux/ScheduleActions');
 
 var MainHeader = React.createClass({
-  getInitialState : function () {
-    return { editing : false };
+  propTypes : {
+    mode    : React.PropTypes.number.isRequired
+  },
+  renderButton : function ( mode ) {
+    switch ( mode ) {
+      case 0:
+        return <MainHeadBtn />
+      case 1:
+        return <WelcomeBtn />
+      default:
+        throw { message : "invalid mode "+mode, name : "InvalidArgumentError" }
+    }
   },
   render : function () {
-    var msg = this.state.editing ? "Save Schedule" : "Edit Schedule";
     return ( 
       <nav className="main-header navbar navbar-default">
         <div className="container">
@@ -14,9 +25,7 @@ var MainHeader = React.createClass({
             <a className="navbar-brand" href="#">Schedule Manager</a>
           <div className="btn-toolbar pull-right">
             <div className="main-header-btn-group btn-group">
-              <button type="button" className="btn btn-primary"
-                      onClick={this.switchEditMode}>{msg}
-              </button>
+              {this.renderButton(this.props.mode)}
             </div>
           </div>
           </div>
@@ -24,11 +33,6 @@ var MainHeader = React.createClass({
       </nav>
     );
   },
-  switchEditMode : function ( ev ) {
-    var is_editing = this.state.editing;
-    ScheduleActions.edit( { editing : !is_editing } );
-    this.setState( { editing : !is_editing } );
-  }
 });
 
 module.exports = MainHeader;

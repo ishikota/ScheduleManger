@@ -12,18 +12,18 @@ describe( 'flux architecture for schedule data flow', function () {
     var dummyDate = new Date(2015,9,31);
 
     it ( "should dispatch orderCalendar request", function () {
-      ScheduleActions.update( { year:2015, month:9, day:31, filter:0 } );
+      ScheduleActions.updateCalendar( { year:2015, month:9, day:31, filter:0 } );
       expect(Dispatcher.dispatch).toBeCalledWith({
         actionType : ScheduleConstants.UPDATE_CALENDAR,
         data       : { year:2015, month:9, day:31, filter:0 }
       });
     });
 
-    it ( "should dispatch edit request", function () {
-      ScheduleActions.edit( { state : true } );
+    it ( 'should dispatch update schedule request', function () {
+      ScheduleActions.updateSchedule( { day:2, next_state:1 } );
       expect(Dispatcher.dispatch).toBeCalledWith({
-        actionType : ScheduleConstants.EDIT_CALENDAR,
-        data       : { state : true }
+        actionType : ScheduleConstants.UPDATE_SCHEDULE,
+        data       : { day:2, next_state:1 }
       });
     });
 

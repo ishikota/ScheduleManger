@@ -45,7 +45,7 @@ var PanelHeader = React.createClass({
   },
   handleClick : function ( menu ) {
     return function ( ev ) {
-      ScheduleActions.update({ filter : menu.id });
+      ScheduleActions.updateCalendar({ filter : menu.id });
     };
   }
 });

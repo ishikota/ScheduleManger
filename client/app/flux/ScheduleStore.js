@@ -7,22 +7,24 @@ var ScheduleStore = function() {
   this.emitter = new events.EventEmitter();
   this.room_data = {};
   // make default dev room
-  var now = new Date();
-  this.room_data[0] = {
-    state    : {
-      editing : false
-    },
+  var now = new Date(),
+      sched = [];
+  sched[now.getMonth()] = 
+    [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ];
+
+  this.event_data = {
     account  : {
       id : -1,
       name : null
     },
     calendar : { 
-      year   : now.getFullYear(),
-      month  : now.getMonth(),
-      day    : now.getDay(),
-      filter : 0 ,
-      status : [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ] }
+      year     : now.getFullYear(),
+      month    : now.getMonth(),
+      day      : now.getDay(),
+      filter   : 0 ,
+      schedule : sched
+    }
   };
 };
 
@@ -40,34 +42,38 @@ ScheduleStore.prototype.removeChangeListener = function(callback) {
   this.emitter.removeListener(CHANGE_EVENT, callback);
 };
 
-
-
 // Schedule-specific methods
 // emit change methods
+
+ScheduleStore.prototype.switchCalendar = function ( id ) {
+  var new_calendar;
+  switch ( id ) {
+    case -1 : new_calendar = FakeData.getEventData(); break;
+    default : new_calendar = FakeData.getPersonalData(id).schedule;
+  }
+  this.event_data.calendar.status = new_calendar;
+}
+
 ScheduleStore.prototype.changeCalendar = function ( data ) {
   console.log("chca "+JSON.stringify(data));
-  _.extend(this.room_data[0].calendar, data);
-  console.log("data: "+JSON.stringify(this.room_data[0]));
+  _.extend(this.event_data.calendar, data);
+  console.log("data: "+JSON.stringify(this.event_data));
   this.emitChange();
 }
 
-ScheduleStore.prototype.changeState = function ( data ) {
-  console.log("chst "+JSON.stringify(data));
-  _.extend(this.room_data[0].state, data);
-  console.log("data: "+JSON.stringify(this.room_data[0]));
+ScheduleStore.prototype.updateSchedule = function ( data ) {
+  console.log("chsc "+JSON.stringify(data));
+  var month = this.event_data.calendar.month;
+  this.event_data.calendar.schedule[month][data.day] = data.next_state;
   this.emitChange();
 }
-
 
 // API methods
 ScheduleStore.prototype.receiveCalendarData = function(callback) {
-  var fake_room = 0,
-      id   = this.room_data[fake_room].state.editing ? 1 : 0,
-      cal  = this.room_data[fake_room].calendar,
-      st   = this.calcStatus(id, cal.year, cal.month, cal.day, cal.filter),
+  var cal  = this.event_data.calendar,
       data = {
         date : { year : cal.year, month : cal.month },
-        status : st 
+        schedule : this.event_data.calendar.schedule,
       };
   callback(data);
 }
@@ -76,44 +82,37 @@ ScheduleStore.prototype.receivePanelData = function(callback) {
   callback(this.calcSchedule());
 }
 
-ScheduleStore.prototype.receiveEditInfo = function(callback) {
+ScheduleStore.prototype.receiveInputState = function(callback) {
   callback(this.calcEditInfo());
 }
 
 // business logic method
 
-/*
- * room_id is 0           -> get room schedule status
- * room_id is :id (not 0) -> get personal schedule status
- * */
-ScheduleStore.prototype.calcStatus = function ( room_id,y,m,d,f ) {
-  if ( room_id === 0 ) {
-    return FakeData.ROOM_STATUS();
-  } else {
-    return FakeData.PERSONAL_STATUS();
-  }
+ScheduleStore.prototype.calcStatus = function ( room_id ) {
+  /* TODO : calculate room schedule status */
+  throw { message : "do not use this method yet", name : "UnImplementedError" }
 }
 
 ScheduleStore.prototype.calcSchedule = function ( people_id ) {
   var panel = Math.round(Math.random()) == 1 ? FakeData.PANEL1() : FakeData.PANEL2();
-  panel.filter = this.room_data[0].calendar.filter;
+  panel.filter = this.event_data.calendar.filter;
   return panel;
 }
 
 ScheduleStore.prototype.calcEditInfo = function() {
-  var fill_dt = this.getFillDate();
-  return {
-    editing : this.room_data[0].state.editing,
-    numer   : fill_dt.numer,
-    denom   : fill_dt.denom
-  };
-}
+  var month, day, 
+      denom = 0, 
+      numer = 0,
+      sd = this.event_data.calendar.schedule;
 
-ScheduleStore.prototype.getFillDate = function () {
-  return { 
-    numer : Math.floor(Math.random()*11),
-    denom : Math.floor(Math.random()*11+11)
-  };
+  for ( month in sd ) {
+    for ( day in sd[month] ) {
+      denom += 1;
+      if ( sd[month][day] == 1 ) { numer += 1; }
+    }
+  }
+
+  return { numer : numer, denom : denom };
 }
 
 // db method ?

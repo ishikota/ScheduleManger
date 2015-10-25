@@ -16,7 +16,7 @@ var Main = React.createClass({
 
     y   = cd.date.year;
     m   = cd.date.month;
-    st  = cd.status;
+    st  = cd.schedule[m];
     return (
       <div>
         <div className="col-xs-12 col-sm-7">
@@ -30,8 +30,8 @@ var Main = React.createClass({
     );
   },
   colors : ["", "blue", "red", "red"],
-  callback : function ( ev ) {
-    ScheduleActions.update( { date : { day : this.props.val } } );
+  callback : function (data) {
+    ScheduleActions.updateSchedule(data);
   }
 });
 

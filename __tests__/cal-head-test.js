@@ -41,7 +41,7 @@ describe( 'Calendar Header component' , function () {
       var btn_next= TestUtils.scryRenderedDOMComponentsWithClass(
                       subject, "next"
                     ),
-          target = ScheduleActions.update.mock;
+          target = ScheduleActions.updateCalendar.mock;
       expect(btn_next.length).toBe(1);
       TestUtils.Simulate.click(React.findDOMNode(btn_next[0]));
       expect(target.calls[target.calls.length-1][0]).toEqual({ year:2015, month:11 });
@@ -52,7 +52,7 @@ describe( 'Calendar Header component' , function () {
       var btn_back = TestUtils.scryRenderedDOMComponentsWithClass(
                       subject, "back"
                     ),
-          target = ScheduleActions.update.mock;
+          target = ScheduleActions.updateCalendar.mock;
       expect(btn_back.length).toBe(1);
       TestUtils.Simulate.click(React.findDOMNode(btn_back[0]));
       expect(target.calls[target.calls.length-1][0]).toEqual({ year:2015, month:9 });
@@ -64,7 +64,7 @@ describe( 'Calendar Header component' , function () {
       var subject = TestUtils.renderIntoDocument(
         <CalHead year={1191} month={11}/>
       ),
-          target  = ScheduleActions.update.mock;
+          target  = ScheduleActions.updateCalendar.mock;
       subject.handleClick({ target : { className : ['next'] }});
       expect(target.calls[target.calls.length-1][0]).toEqual({year:1192, month:0});
     });

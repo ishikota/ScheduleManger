@@ -1,5 +1,6 @@
 var React = require('react');
 var Calendar = require('./calendar');
+var ScheduleActions   = require("../flux/ScheduleActions");
 
 var Welcome = React.createClass({
   render : function () {
@@ -11,18 +12,22 @@ var Welcome = React.createClass({
     if ( !cd ) {
       return <div className='app' />
     }
+    console.log("tes"+JSON.stringify(cd));
    
     y   = cd.date.year;
     m   = cd.date.month;
-    st  = cd.status;
+    st  = cd.schedule;
     return (
       <div className="col-xs-12 col-sm-12">
         <Calendar year={y} month={m} status={st}
-                  statelist={this.colors}/>
+                  statelist={this.colors} onClick={this.callback}/>
       </div>
     );
   },
-  colors : [ "", "blue" ]
+  colors : [ "", "blue" ],
+  callback : function (data) {
+    ScheduleActions.updateSchedule(data);
+  }
 });
 
 module.exports = Welcome;

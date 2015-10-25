@@ -10,6 +10,9 @@ Dispatcher.register( function ( payload ) {
     case ScheduleConstants.UPDATE_CALENDAR:
       ScheduleStore.changeCalendar( payload.data );
       break;
+    case ScheduleConstants.UPDATE_SCHEDULE:
+      ScheduleStore.updateSchedule( payload.data );
+      break;
     case ScheduleConstants.EDIT_CALENDAR:
       ScheduleStore.changeState( payload.data );
       break;
@@ -26,16 +29,16 @@ var App = React.createClass({
       console.log("receive new panel : "+JSON.stringify(data));
       this.setState( { panel_data : data } );
     }.bind(this));
-    ScheduleStore.receiveEditInfo( function( data ){
-      console.log("receive new hint: "+JSON.stringify(data));
-      this.setState( { hint_data : data } );
+    ScheduleStore.receiveInputState( function( data ){
+      console.log("receive input state : "+JSON.stringify(data));
+      this.setState( { input_state : data } );
     }.bind(this));
   },
   getInitialState : function () {
     return {
-      cal_data   : null,
-      panel_data : null,
-      hint_data  : { editing : false, numer : 0, denom : 100 }
+      cal_data    : null,
+      panel_data  : null,
+      input_state : { numer : 0, denom : 100 }
     };
   },
   componentWillMount : function () {
@@ -48,16 +51,11 @@ var App = React.createClass({
     ScheduleStore.removeChangeListener(this.handleChange);
   },
   render : function () {
-    var cd = this.state.cal_data,
-        pd = this.state.panel_data,
-        ed = this.state.edit_data,
-        y, m, st, mode;
-
     var mode = this.props.children.type.displayName == 'Main' ? 0 : 1;
     return (
       <div className='app'>
-        <MainHeader/>
-        <HintPanel mode={mode} data={this.state.hint_data} />
+        <MainHeader mode={mode} />
+        <HintPanel mode={mode} data={this.state.input_state} />
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }
         </div>

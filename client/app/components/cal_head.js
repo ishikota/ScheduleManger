@@ -27,7 +27,9 @@ var CalHeader = React.createClass({
       forward_month = ev.target.className.indexOf('next') > -1,
       alpha         = forward_month ? 1 : -1;
     date.setMonth( date.getMonth() + alpha );
-    ScheduleActions.update( { year : date.getFullYear(), month : date.getMonth() } );
+    ScheduleActions.updateCalendar( 
+        { year : date.getFullYear(), month : date.getMonth() }
+    );
   },
   parseMonth : function ( month ) {
     var names = ["January", "February", "March", "April", "May", "June",
