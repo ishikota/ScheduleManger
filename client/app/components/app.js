@@ -1,5 +1,6 @@
 var React             = require("react");
 var MainHeader        = require("./main_header");
+var Modal             = require('./modal');
 var HintPanel         = require("./hint_panel");
 var ScheduleStore     = require("../flux/ScheduleStore");
 var Dispatcher        = require("../flux/Dispatcher");
@@ -59,6 +60,7 @@ var App = React.createClass({
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }
         </div>
+        <Modal mode={mode}/>
       </div>
     );
   }

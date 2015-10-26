@@ -5,5 +5,10 @@ module.exports = {
   WELCOME_INPUT_STATE : "日の候補日が選択されています．",
   WELCOME_HOWTO_SAVE  : "候補日の選択が終わったら，右上の「イベントを作成」をクリックしてください．",
   MAIN_HEADER_BUTTON_OFF : "予定を編集",
-  MAIN_HEADER_BUTTON_ON  : "保存"
+  MAIN_HEADER_BUTTON_ON  : "保存",
+
+  SHARE_NAME_LABEL  : "あなたの名前",
+  SHARE_DEFALT_NAME : "名無しさん",
+  SHARE_BTN_TITLE   : "SNSでシェア",
+  SHARE_BTN_SEND    : "これでOK"
 }

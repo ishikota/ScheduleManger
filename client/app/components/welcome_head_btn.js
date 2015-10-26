@@ -20,6 +20,7 @@ var WelcomeHeadBtn = React.createClass({
   },
   handleClick : function () {
     console.log(ScheduleStore.event_data.calendar.schedule);
+    $('#modal').modal();
   }
 });
 
