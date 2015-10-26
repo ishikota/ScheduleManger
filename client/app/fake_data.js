@@ -1,5 +1,16 @@
 module.exports = {
 
+  getFakeCalendar : function () {
+    return {
+      year     : 2015,
+      month    : 9,
+      day      : 31,
+      filter   : 0,
+      schedule : [null,null,null,null,null,null,null,null,null,
+                 [0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+                  ]
+    }
+  },
   getEventData : function () {
     return this.EVENT_DATA();
   },

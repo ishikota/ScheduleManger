@@ -2,14 +2,17 @@ var React   = require('react');
 var TEXT    = require('../text_content');
 
 var ShareModalBody = React.createClass({
+  propTypes : {
+    data : React.PropTypes.object.isRequired
+  },
   getInitialState : function () {
     return { name : "" }
   },
   render : function () {
     var share_tmplate,
         name = this.state.name ? this.state.name : TEXT.SHARE_DEFALT_NAME,
-        send_class = "btn btn-primaty modal-send";
-    share_tmplate = name+" created event!!";
+        send_class = "btn btn-primary modal-send";
+    share_tmplate = this.createShareTemplate( name, this.props.data.schedule );
     send_class += this.state.name ? "" : " disabled";
     return (
       <div>
@@ -48,6 +51,25 @@ var ShareModalBody = React.createClass({
   },
   dummyCallback : function ( ev ) {
     /* needed to surpress jest warning */
+  },
+  createShareTemplate : function ( name, schedule ) {
+    var m, d, txt ="", date="";
+    for ( m in schedule ) {
+      for ( d in schedule[m] ) {
+        if (schedule[m][d]===1) {
+          date += (parseInt(m)+1)+"/"+d+" , ";
+        }
+      }
+    }
+    date = date.slice(0, date.length-3);
+    txt += name + " " +TEXT.SHARE_TMPLATE_1;
+    txt += TEXT.SHARE_TMPLATE_2;
+    txt += TEXT.SHARE_TMPLATE_3;
+    txt += date +"\n";
+    txt += TEXT.SHARE_TMPLATE_3;
+    txt += TEXT.SHARE_TMPLATE_4;
+    txt += TEXT.SHARE_TMPLATE_5;
+    return txt;
   }
 });
 

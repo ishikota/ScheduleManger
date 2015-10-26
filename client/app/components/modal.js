@@ -1,20 +1,22 @@
 var React = require('react');
+var TEXT  = require('../text_content');
 var ShareModalBody = require('./share_modal_body');
 
 var Modal = React.createClass({
   propTypes : {
-    mode  : React.PropTypes.number.isRequired
+    mode  : React.PropTypes.number.isRequired,
+    data  : React.PropTypes.object.isRequired
   },
   renderBody : function ( mode ) {
     switch ( mode ) {
-      case 0 : return <ShareModalBody />;
-      case 1 : return <ShareModalBody />;
+      case 0 : return <ShareModalBody data={this.props.data}/>;
+      case 1 : return <ShareModalBody data={this.props.data}/>;
     }
   },
   getTitle : function ( mode ) {
     switch ( mode ) {
       case 0 : return "Let's Share";
-      case 1 : return "Let's Share";
+      case 1 : return TEXT.SHARE_TITLE;
     }
   },
   render : function () {

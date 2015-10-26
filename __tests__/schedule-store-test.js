@@ -102,4 +102,27 @@ describe( 'ScheduleStore', function () {
 
   });
 
+  describe( 'use fake calendar', function () {
+    var before, mockFunc;
+
+    beforeEach( function () {
+      mockFunc = jest.genMockFunction();
+      before = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+      ScheduleStore.event_data.calendar = FakeData.getFakeCalendar();
+      ScheduleStore.addChangeListener(mockFunc);
+    });
+
+    afterEach( function () {
+      ScheduleStore.removeChangeListener(mockFunc);
+      ScheduleStore.event_data.calendar = before;
+    });
+
+    it ( 'should receive current input state and ratio', function () {
+      var expected = FakeData.getFakeCalendar().schedule;
+      ScheduleStore.receiveInputState(mockFunc);
+      expect(mockFunc).lastCalledWith({schedule:expected,numer:2,denom:32});
+    });
+  });
+
+
 });

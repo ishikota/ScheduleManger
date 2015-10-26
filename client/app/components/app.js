@@ -60,7 +60,7 @@ var App = React.createClass({
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }
         </div>
-        <Modal mode={mode}/>
+        <Modal mode={mode} data={this.state.input_state}/>
       </div>
     );
   }

@@ -8,10 +8,11 @@ var ScheduleStore = function() {
   this.room_data = {};
   // make default dev room
   var now = new Date(),
-      sched = [];
-  sched[now.getMonth()] = 
-    [ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 ];
+      sched = _.map(_.range(12), function () {
+                     return _.map(_.range(31), function () {
+                       return 0;
+                     })
+      });
 
   this.event_data = {
     account  : {
@@ -83,7 +84,9 @@ ScheduleStore.prototype.receivePanelData = function(callback) {
 }
 
 ScheduleStore.prototype.receiveInputState = function(callback) {
-  callback(this.calcEditInfo());
+  var info = this.calcEditInfo();
+  _.extend(info, {schedule:this.event_data.calendar.schedule});
+  callback(info);
 }
 
 // business logic method
