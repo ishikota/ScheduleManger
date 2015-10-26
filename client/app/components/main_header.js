@@ -5,14 +5,15 @@ var ScheduleActions = require('../flux/ScheduleActions');
 
 var MainHeader = React.createClass({
   propTypes : {
-    mode    : React.PropTypes.number.isRequired
+    mode : React.PropTypes.number.isRequired,
+    data : React.PropTypes.object.isRequired
   },
   renderButton : function ( mode ) {
     switch ( mode ) {
       case 0:
         return <MainHeadBtn />
       case 1:
-        return <WelcomeBtn />
+        return <WelcomeBtn data={this.props.data}/>
       default:
         throw { message : "invalid mode "+mode, name : "InvalidArgumentError" }
     }

@@ -54,7 +54,7 @@ var App = React.createClass({
     var mode = this.props.children.type.displayName == 'Main' ? 0 : 1;
     return (
       <div className='app'>
-        <MainHeader mode={mode} />
+        <MainHeader mode={mode} data={this.state.input_state} />
         <HintPanel mode={mode} data={this.state.input_state} />
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }

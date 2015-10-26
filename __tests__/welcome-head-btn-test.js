@@ -7,16 +7,26 @@ describe( 'WelcomeHeadBtn component', function () {
   var ScheduleActions = require('../client/app/flux/ScheduleActions');
   var TEXT            = require('../client/app/text_content');
 
-  var subject;
-  beforeEach( function () {
-    subject = TestUtils.renderIntoDocument(
-      <WelcomeHeadBtn />
-    );
-  });
-
-  it ( 'should display correct message', function () {
+  it ( 'activated state', function () {
+    var dat = { numer:1, denom:10 },
+      subject = TestUtils.renderIntoDocument(
+      <WelcomeHeadBtn data={dat} />
+      ),
+      btn = TestUtils.scryRenderedDOMComponentsWithTag(subject, "btn")[0];
     expect(React.findDOMNode(subject).textContent)
         .toEqual(TEXT.WELCOME_HEADER_BUTTON);
+    expect(btn.className).not.toContain("disabled");
+  });
+
+  it ( 'unactivated state', function () {
+    var dat = { numer:0, denom:10 },
+      subject = TestUtils.renderIntoDocument(
+      <WelcomeHeadBtn data={dat} />
+      ),
+      btn = TestUtils.scryRenderedDOMComponentsWithTag(subject, "btn")[0];
+    expect(React.findDOMNode(subject).textContent)
+        .toEqual(TEXT.WELCOME_HEADER_BUTTON);
+    expect(btn.className).toContain("disabled");
   });
 
 });
