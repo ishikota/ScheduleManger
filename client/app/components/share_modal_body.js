@@ -1,5 +1,6 @@
-var React   = require('react');
-var TEXT    = require('../text_content');
+var React = require('react');
+var TEXT  = require('../text_content');
+var Link  = require('react-router').Link;
 
 var ShareModalBody = React.createClass({
   propTypes : {
@@ -39,9 +40,12 @@ var ShareModalBody = React.createClass({
           <button type="button" className="btn btn-primary">Twitter</button>
         </div>
         <div className="modal-footer">
-          <button type="button" className={send_class}>
-            {TEXT.SHARE_BTN_SEND}
-          </button>
+          <Link to={'/event/'}>
+            <button type="button" className={send_class}
+                    onClick={this.handleClick}>
+              {TEXT.SHARE_BTN_SEND}
+            </button>
+          </Link>
         </div>
       </div>
     );
@@ -51,6 +55,9 @@ var ShareModalBody = React.createClass({
   },
   dummyCallback : function ( ev ) {
     /* needed to surpress jest warning */
+  },
+  handleClick : function ( ev ) {
+    $('#modal').modal('hide');
   },
   createShareTemplate : function ( name, schedule ) {
     var m, d, txt ="", date="";
