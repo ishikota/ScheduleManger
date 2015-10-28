@@ -12,23 +12,50 @@ describe( 'Calendar Table component', function () {
 
   describe( 'basic spec check', function () {
     var subject, mockFunc;
-    beforeEach( function () {
-      mockFunc = jest.genMockFunction();
+    var init = function ( month ) {
       subject = TestUtils.renderIntoDocument(
-        <CalTable year={2015} month={1} status={mockSchedule}
+        <CalTable year={2015} month={month} status={mockSchedule}
                   statelist={[1,2,3]} onClick={mockFunc}/>
-      );
+        );
+    };
+
+    beforeEach( function () {
+      var mockFunc = jest.genMockFunction();
     });
     
-    it ( 'should pass status to the row', function () {
+    it ( 'shold pass status to the row in Feburary 2015', function () {
+      init(1);
       var rows = TestUtils.scryRenderedComponentsWithType(subject, CalRow);
       expect(rows.length).toBe(4);
-      expect(rows[0].props.status).toEqual(mockSchedule.slice( 0, 7));
-      expect(rows[1].props.status).toEqual(mockSchedule.slice( 7,14));
-      expect(rows[2].props.status).toEqual(mockSchedule.slice(14,21));
-      expect(rows[3].props.status).toEqual(mockSchedule.slice(21,28));
+      expect(rows[0].props.status).toEqual(mockSchedule.slice( 1, 8));
+      expect(rows[1].props.status).toEqual(mockSchedule.slice( 8,15));
+      expect(rows[2].props.status).toEqual(mockSchedule.slice(15,22));
+      expect(rows[3].props.status).toEqual(mockSchedule.slice(22,29));
       expect(rows[0].props.statelist).toEqual([1,2,3]);
       expect(rows[0].props.onClick).toEqual(mockFunc);
+    });
+
+    it ( 'shold pass status to the row in Octover 2015', function () {
+      init(9);
+      var rows = TestUtils.scryRenderedComponentsWithType(subject, CalRow);
+      expect(rows.length).toBe(5);
+      expect(rows[0].props.status).toEqual([-1,-1,-1,-1,0,0,0]);
+      expect(rows[1].props.status).toEqual([0,0,1,1,0,0,0]);
+      expect(rows[2].props.status).toEqual([1,0,0,0,0,0,1]);
+      expect(rows[3].props.status).toEqual([0,0,0,0,1,0,0]);
+      expect(rows[4].props.status).toEqual([0,0,0,0,0,0,0]);
+    });
+
+    xit ( 'shold pass status to the row August 2015', function () {
+      init(7);
+      var rows = TestUtils.scryRenderedComponentsWithType(subject, CalRow);
+      expect(rows.length).toBe(6);
+      expect(rows[0].props.status).toEqual([-1,-1,-1,-1,-1,-1,0]);
+      expect(rows[1].props.status).toEqual([0,0,0,0,1,1,0]);
+      expect(rows[2].props.status).toEqual([0,0,1,0,0,0,0]);
+      expect(rows[3].props.status).toEqual([0,1,0,0,0,0,1]);
+      expect(rows[4].props.status).toEqual([0,0,0,0,0,0,0]);
+      expect(rows[5].props.status).toEqual([0,0,-1,-1,-1,-1,-1]);
     });
 
   });

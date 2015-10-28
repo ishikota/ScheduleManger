@@ -9,7 +9,7 @@ var ScheduleStore = function() {
   // make default dev room
   var now = new Date(),
       sched = _.map(_.range(12), function () {
-                     return _.map(_.range(31), function () {
+                     return _.map(_.range(32), function () {
                        return 0;
                      })
       });

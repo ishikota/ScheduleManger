@@ -40,7 +40,7 @@ var Calendar = React.createClass({
     return (
         <div className="cal-container">
           <CalHeader year={year} month={month} />
-          <CalTable  year={year} month={month} status={this.state.status}
+          <CalTable  year={year} month={month} status={this.state.status[month]}
                      statelist={this.props.statelist}
                      onClick={this.props.onClick} />
         </div>

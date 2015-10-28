@@ -1,3 +1,4 @@
+var _       = require('underscore');
 var React   = require('react');
 var CalCell = require('./cal_cell');
 var CalRow  = require('./cal_row');
@@ -13,19 +14,32 @@ var CalTable = React.createClass({
     };
   },
   renderRows : function () {
-    var i,
+    var
       rows   = [],
       end    = this.getLastDay(),
       offset = this.getOffset(),
-      lines  = this.getLines();
+      lines  = this.getLines(),
+      memo   = _.map(_.range(lines),function() {
+                 return _.map( _.range(7), function() { return -1 } )
+               });
 
-    for ( i=0; i<lines; i++ ) {
-      var status = this.props.status.slice(i*7, (i+1)*7);
+    // calculate status of each row
+    // status of offset cell is set to -1
+    for ( var i=0; i<lines; i++ ) {
+      for ( var j=0; j<7; j++ ) {
+        var day = i*7-offset+1+j;
+        if( 0 < day && day <= end) {
+          memo[i][j] = this.props.status[day];
+        }
+      }
+    }
+
+    for ( var i=0; i<lines; i++ ) {
       rows.push(
-        <CalRow key={i} start={i*7-offset+1} end={end} status={status}
-                statelist={this.props.statelist}
-                onClick={this.props.onClick}/>
-        );
+       <CalRow key={i} start={i*7-offset+1} end={end} status={memo[i]}
+               statelist={this.props.statelist}
+               onClick={this.props.onClick}/>
+      );
     }
     return rows;
   },
