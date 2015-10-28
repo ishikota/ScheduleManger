@@ -7,6 +7,7 @@ describe( 'ScheduleStore', function () {
   var ScheduleStore = require('../client/app/flux/ScheduleStore');
   var FakeData  = require('../client/app/fake_data');
   var _ = require('underscore');
+  var MemDB = require('../client/app/mem_db');
 
   var calendar = { year:2015, month:9, day:31, filter:0, schedule:[1,0,0,1,1] };
 
@@ -124,5 +125,56 @@ describe( 'ScheduleStore', function () {
     });
   });
 
+  describe( 'createEvent', function () {
+    it ( 'should save event in MemDB', function () {
+      var target,
+        schedule = FakeData.getFakeEventData().member[0].schedule,
+        expected = { id:"0", member:[{ id:"0",name:"Kota",schedule:schedule}] };
+      ScheduleStore.createEvent( "0", "Kota", schedule );
+      target = MemDB.insert.mock.calls;
+      expect(target[target.length-1][0]).toBe(0);
+      expect(target[target.length-1][1]).toEqual(expected);
+    });
+  });
+
+  describe( 'switchCalendar', function () {
+    var before;
+    beforeEach( function () {
+      before = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+    });
+
+    afterEach( function () {
+      ScheduleStore.event_data.calendar = before;
+    });
+
+    it ( 'should switch Calendar which id is 0', function () {
+      var dummyObj = { member:{"0":{schedule:[0]} } };
+      spyOn(MemDB, "find").andReturn(dummyObj);
+      ScheduleStore.switchCalendar("0");
+      expect(ScheduleStore.event_data.calendar).toEqual(
+        {
+          year     : before.year,
+          month    : before.month,
+          day      : before.day,
+          filter   : before.filter,
+          schedule : [0]
+        }
+      );
+    });
+
+    // TODO:implements logic to calculate event data and replace below schedule
+    xit ( 'should switch with event calendar', function () {
+      ScheduleStore.switchCalendar("-1");
+      expect(ScheduleStore.event_data.calendar).toEqual(
+        {
+          year     : before.year,
+          month    : before.month,
+          day      : before.day,
+          filter   : before.filter,
+          schedule : FakeData.getFakeEventData().member[0].schedule // FIXME
+        }
+      );
+    });
+  });
 
 });

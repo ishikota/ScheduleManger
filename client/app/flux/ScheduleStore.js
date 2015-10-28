@@ -2,6 +2,7 @@ var _ = require('underscore');
 var events = require("events");
 var CHANGE_EVENT = "changeEvent";
 var FakeData = require("../fake_data");
+var MemDB = require("../mem_db");
 
 var ScheduleStore = function() {
   this.emitter = new events.EventEmitter();
@@ -47,12 +48,13 @@ ScheduleStore.prototype.removeChangeListener = function(callback) {
 // emit change methods
 
 ScheduleStore.prototype.switchCalendar = function ( id ) {
-  var new_calendar;
+  var new_schedule;
   switch ( id ) {
-    case -1 : new_calendar = FakeData.getEventData(); break;
-    default : new_calendar = FakeData.getPersonalData(id).schedule;
+    case -1 : new_schedule = FakeData.getEventData(); break;
+    default : new_schedule = MemDB.find("0").member[id].schedule;
   }
-  this.event_data.calendar.status = new_calendar;
+  this.event_data.calendar.schedule = new_schedule;
+  this.emitChange();
 }
 
 ScheduleStore.prototype.changeCalendar = function ( data ) {
@@ -68,6 +70,18 @@ ScheduleStore.prototype.updateSchedule = function ( data ) {
   this.event_data.calendar.schedule[month][data.day] = data.next_state;
   this.emitChange();
 }
+
+ScheduleStore.prototype.createEvent = function ( id, leader_name, leader_schedule ) {
+  var event_data = {
+    id : id,
+    member : {
+      "0" : { id : "0", name:leader_name, schedule:leader_schedule }
+    }
+  };
+  MemDB.insert(0,event_data);
+}
+
+
 
 // API methods
 ScheduleStore.prototype.receiveCalendarData = function(callback) {
