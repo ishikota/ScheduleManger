@@ -57,6 +57,7 @@ var ShareModalBody = React.createClass({
   handleClick : function ( ev ) {
     this.hideModal();
     ScheduleStore.createEvent("0", this.state.name, this.props.data.schedule);
+    ScheduleStore.login("1", this.state.name);
     ScheduleStore.switchCalendar("0");
   },
   hideModal : function () {

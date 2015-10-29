@@ -37,7 +37,7 @@ var App = React.createClass({
   },
   getInitialState : function () {
     return {
-      cal_data    : null,
+      cal_data    : { owner_id : null }, // need for before receiveCalendar
       panel_data  : null,
       input_state : { numer : 0, denom : 100 }
     };
@@ -53,9 +53,13 @@ var App = React.createClass({
   },
   render : function () {
     var mode = this.props.children.type.displayName == 'Main' ? 0 : 1;
+    var head_dat = mode === 0 ?
+      { owner_id : this.state.cal_data.owner_id } :
+      this.state.input_state;
+
     return (
       <div className='app'>
-        <MainHeader mode={mode} data={this.state.input_state} />
+        <MainHeader mode={mode} data={head_dat} />
         <HintPanel mode={mode} data={this.state.input_state} />
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }

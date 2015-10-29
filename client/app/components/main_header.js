@@ -11,7 +11,7 @@ var MainHeader = React.createClass({
   renderButton : function ( mode ) {
     switch ( mode ) {
       case 0:
-        return <MainHeadBtn />
+        return <MainHeadBtn data={this.props.data} />
       case 1:
         return <WelcomeBtn data={this.props.data}/>
       default:

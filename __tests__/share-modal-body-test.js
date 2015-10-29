@@ -57,6 +57,10 @@ describe ( 'ShareModalBody component', function () {
 
     calls = ScheduleStore.switchCalendar.mock.calls;
     expect(calls[calls.length-1][0]).toEqual("0");
+
+    calls = ScheduleStore.login.mock.calls;
+    expect(calls[calls.length-1][0]).toEqual("1");
+    expect(calls[calls.length-1][1]).toEqual("Kota");
   });
 
 });

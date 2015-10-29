@@ -9,7 +9,20 @@ describe( 'ScheduleStore', function () {
   var _ = require('underscore');
   var MemDB = require('../client/app/mem_db');
 
-  var calendar = { year:2015, month:9, day:31, filter:0, schedule:[1,0,0,1,1] };
+  var calendar = { owner_id:"-1", year:2015, month:9, day:31, filter:0, schedule:[1,0,0,1,1] };
+  var answer =
+        [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0],
+        [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
 
   describe ( 'basic function', function () {
     var before;
@@ -25,17 +38,17 @@ describe( 'ScheduleStore', function () {
       // change only day
       ScheduleStore.changeCalendar( { day : 7 } );
       expect(ScheduleStore.event_data.calendar).toEqual(
-        { year:2015, month:9, day:7, filter:0, schedule:[1,0,0,1,1] }
+        { owner_id:"-1", year:2015, month:9, day:7, filter:0, schedule:[1,0,0,1,1] }
       );
       // change multiple property
       ScheduleStore.changeCalendar( { year:1192, month:7, schedule:[1,2,3] } );
       expect(ScheduleStore.event_data.calendar).toEqual(
-        { year:1192, month:7, day:7, filter:0, schedule:[1,2,3] }
+        { owner_id:"-1", year:1192, month:7, day:7, filter:0, schedule:[1,2,3] }
       );
       // change filter
       ScheduleStore.changeCalendar( { filter : 2 } );
       expect(ScheduleStore.event_data.calendar).toEqual(
-        { year:1192, month:7, day:7, filter:2, schedule:[1,2,3] }
+        { owner_id:"-1", year:1192, month:7, day:7, filter:2, schedule:[1,2,3] }
       );
     });
 
@@ -91,10 +104,10 @@ describe( 'ScheduleStore', function () {
       var cal  = ScheduleStore.event_data.calendar,
           clbk = jest.genMockFunction(),
           expected = { 
-            date   : { year : 2015 , month : 9},
+            owner_id : cal.owner_id,
+            date     : { year : 2015 , month : 9},
             schedule : [1,0,0,1,1]
           };
-      spyOn(ScheduleStore, "calcStatus").andReturn(expected.schedule);
       ScheduleStore.receiveCalendarData(clbk);
       expect(clbk).lastCalledWith(expected);
       ScheduleStore.receivePanelData(clbk);
@@ -138,42 +151,77 @@ describe( 'ScheduleStore', function () {
   });
 
   describe( 'switchCalendar', function () {
-    var before;
+    var before_cal, before_acc, mockFunc;
     beforeEach( function () {
-      before = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+      before_cal = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+      before_acc = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
+      mockFunc = jest.genMockFunction();
+      ScheduleStore.event_data.account = { id:"1", name:"Kota" };
     });
 
     afterEach( function () {
-      ScheduleStore.event_data.calendar = before;
+      ScheduleStore.event_data.calendar = before_cal;
+      ScheduleStore.event_data.account  = before_acc;
     });
 
-    it ( 'should switch Calendar which id is 0', function () {
-      var dummyObj = { member:{"0":{schedule:[0]} } };
+    it ( 'should switch calendar to event', function () {
+      var data = FakeData.getFakeEventData();
+      var ans  = JSON.parse(JSON.stringify(answer));
+      ans[9][6] = 0;
+      data.member[0].schedule[9][6] = 0;
+      spyOn(MemDB, "find").andReturn(data);
+      ScheduleStore.switchCalendar("-1");
+      ScheduleStore.receiveCalendarData(mockFunc);
+      expect(mockFunc).toBeCalledWith({
+        owner_id : "-1",
+        date     : { year : 2015, month : 9 },
+        schedule : ans
+      });
+    });
+
+    it ( 'should switch calendar to mine', function () {
+      var dummyObj = { member:{"1":{schedule:[1]},"2":{schedule:[2]} } };
       spyOn(MemDB, "find").andReturn(dummyObj);
       ScheduleStore.switchCalendar("0");
+      ScheduleStore.receiveCalendarData(mockFunc);
+      expect(mockFunc).toBeCalledWith({
+        owner_id : "1",
+        date     : { year : 2015, month : 9 },
+        schedule : [1]
+      });
+    });
+
+    it ( 'should switch calendar to his', function () {
+      var dummyObj = { member:{"1":{schedule:[1]},"2":{schedule:[2]} } };
+      spyOn(MemDB, "find").andReturn(dummyObj);
+      ScheduleStore.switchCalendar("2");
       expect(ScheduleStore.event_data.calendar).toEqual(
         {
-          year     : before.year,
-          month    : before.month,
-          day      : before.day,
-          filter   : before.filter,
-          schedule : [0]
+          owner_id : "2",
+          year     : before_cal.year,
+          month    : before_cal.month,
+          day      : before_cal.day,
+          filter   : before_cal.filter,
+          schedule : [2]
         }
       );
     });
+  });
 
-    // TODO:implements logic to calculate event data and replace below schedule
-    xit ( 'should switch with event calendar', function () {
-      ScheduleStore.switchCalendar("-1");
-      expect(ScheduleStore.event_data.calendar).toEqual(
-        {
-          year     : before.year,
-          month    : before.month,
-          day      : before.day,
-          filter   : before.filter,
-          schedule : FakeData.getFakeEventData().member[0].schedule // FIXME
-        }
-      );
+  describe( 'login', function () {
+    it ( 'should set accout id and name', function () {
+      var before = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
+      ScheduleStore.login("0", "Kota");
+      expect(ScheduleStore.event_data.account.id).toEqual("0");
+      expect(ScheduleStore.event_data.account.name).toEqual("Kota");
+      ScheduleStore.event_data.account = before;
+    });
+  });
+
+  describe( 'calcEventSchedule', function () {
+    it ( 'should calc event schedule', function () {
+      spyOn(MemDB, "find").andReturn(FakeData.getFakeEventData());
+      expect(ScheduleStore.calcEventSchedule("0",0)).toEqual(answer);
     });
   });
 

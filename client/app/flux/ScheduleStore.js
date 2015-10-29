@@ -1,8 +1,8 @@
-var _ = require('underscore');
-var events = require("events");
+var _            = require('underscore');
+var MemDB        = require("../mem_db");
+var events       = require("events");
 var CHANGE_EVENT = "changeEvent";
-var FakeData = require("../fake_data");
-var MemDB = require("../mem_db");
+var FakeData     = require("../fake_data");
 
 var ScheduleStore = function() {
   this.emitter = new events.EventEmitter();
@@ -17,10 +17,11 @@ var ScheduleStore = function() {
 
   this.event_data = {
     account  : {
-      id : -1,
+      id   : -1,
       name : null
     },
-    calendar : { 
+    calendar : {
+      owner_id : null,
       year     : now.getFullYear(),
       month    : now.getMonth(),
       day      : now.getDay(),
@@ -47,12 +48,28 @@ ScheduleStore.prototype.removeChangeListener = function(callback) {
 // Schedule-specific methods
 // emit change methods
 
+/*
+ * -1 and 0 is used as special id.
+ *  id = -1   returns Event Calendar
+ *  id = 0    returns my Calendar
+ *  id = else returns calendar of whose id is passed one
+ */
 ScheduleStore.prototype.switchCalendar = function ( id ) {
   var new_schedule;
   switch ( id ) {
-    case -1 : new_schedule = FakeData.getEventData(); break;
-    default : new_schedule = MemDB.find("0").member[id].schedule;
+    case "-1":
+      var event_id = "0";
+      var filter   = this.event_data.calendar.filter;
+      new_schedule = this.calcEventSchedule(event_id, filter);
+      break;
+    case "0":
+      id = this.event_data.account.id
+      new_schedule = MemDB.find("0").member[id].schedule;
+      break;
+    default:
+      new_schedule = MemDB.find("0").member[id].schedule;
   }
+  this.event_data.calendar.owner_id = id;
   this.event_data.calendar.schedule = new_schedule;
   console.log("switch cal:"+new_schedule);
   this.emitChange();
@@ -82,14 +99,18 @@ ScheduleStore.prototype.createEvent = function ( id, leader_name, leader_schedul
   MemDB.insert(0,event_data);
 }
 
-
+ScheduleStore.prototype.login = function ( id, name ) {
+  this.event_data.account.id   = id;
+  this.event_data.account.name = name;
+}
 
 // API methods
 ScheduleStore.prototype.receiveCalendarData = function(callback) {
   var cal  = this.event_data.calendar,
       data = {
-        date : { year : cal.year, month : cal.month },
-        schedule : this.event_data.calendar.schedule,
+        owner_id : cal.owner_id,
+        date     : { year : cal.year, month : cal.month },
+        schedule : cal.schedule
       };
   callback(data);
 }
@@ -106,9 +127,23 @@ ScheduleStore.prototype.receiveInputState = function(callback) {
 
 // business logic method
 
-ScheduleStore.prototype.calcStatus = function ( room_id ) {
-  /* TODO : calculate room schedule status */
-  throw { message : "do not use this method yet", name : "UnImplementedError" }
+ScheduleStore.prototype.calcEventSchedule = function ( room_id, filter ) {
+  var i,
+    data      = MemDB.find(room_id),
+    members   = data.member,
+    schedule  = _.map(_.range(12), function () {
+      return _.map(_.range(32), function () { return 1; })
+    });
+
+  for( var i=0; i<members.length; i++) {
+    var member = members[i];
+    for ( var m=0; m<schedule.length; m++ ) {
+      for ( var d=0; d<schedule[m].length; d++ ) {
+        schedule[m][d] &= member.schedule[m][d];
+      }
+    }
+  }
+  return schedule;
 }
 
 ScheduleStore.prototype.calcSchedule = function ( people_id ) {
