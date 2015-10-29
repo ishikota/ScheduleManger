@@ -16,7 +16,7 @@ var Main = React.createClass({
 
     y   = cd.date.year;
     m   = cd.date.month;
-    st  = cd.schedule[m];
+    st  = cd.schedule;
     return (
       <div>
         <div className="col-xs-12 col-sm-7">
