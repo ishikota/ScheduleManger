@@ -12,8 +12,7 @@ var Welcome = React.createClass({
     if ( !cd ) {
       return <div className='app' />
     }
-    console.log("tes"+JSON.stringify(cd));
-   
+
     y   = cd.date.year;
     m   = cd.date.month;
     st  = cd.schedule;

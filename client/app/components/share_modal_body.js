@@ -1,5 +1,6 @@
 var React = require('react');
 var TEXT  = require('../text_content');
+var ScheduleStore = require('../flux/ScheduleStore');
 
 var ShareModalBody = React.createClass({
   propTypes : {
@@ -54,8 +55,14 @@ var ShareModalBody = React.createClass({
     /* needed to surpress jest warning */
   },
   handleClick : function ( ev ) {
+    this.hideModal();
+    ScheduleStore.createEvent("0", this.state.name, this.props.data.schedule);
+    ScheduleStore.switchCalendar("0");
+  },
+  hideModal : function () {
     $('#modal').modal('hide');
   },
+    
   createShareTemplate : function ( name, schedule ) {
     var m, d, txt ="", date="";
     for ( m in schedule ) {

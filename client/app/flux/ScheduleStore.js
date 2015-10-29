@@ -54,6 +54,7 @@ ScheduleStore.prototype.switchCalendar = function ( id ) {
     default : new_schedule = MemDB.find("0").member[id].schedule;
   }
   this.event_data.calendar.schedule = new_schedule;
+  console.log("switch cal:"+new_schedule);
   this.emitChange();
 }
 

@@ -2,13 +2,16 @@ jest.dontMock('../client/app/components/share_modal_body');
 jest.dontMock('../client/app/fake_data');
 
 describe ( 'ShareModalBody component', function () {
-  var React = require('react/addons');
-  var TestUtils     = React.addons.TestUtils;
+  var React          = require('react/addons');
+  var TestUtils      = React.addons.TestUtils;
   var ShareModalBody = require('../client/app/components/share_modal_body');
-  var TEXT  = require('../client/app/text_content');
-  var FakeData = require('../client/app/fake_data');
+  var ScheduleStore  = require('../client/app/flux/ScheduleStore');
+  var TEXT           = require('../client/app/text_content');
+  var FakeData       = require('../client/app/fake_data');
+  //var $ = require('jquery');
 
   var subject, data = { numer:2, denom:32, schedule : FakeData.getEventData().schedule };
+
   beforeEach( function () {
     subject = TestUtils.renderIntoDocument(<ShareModalBody data={data}/>);
   });
@@ -36,6 +39,24 @@ describe ( 'ShareModalBody component', function () {
     expect(send_btn.className).not.toContain("disabled");
   });
 
+  it ( 'should handle click', function () {
+    var calls,
+      name_input = TestUtils.findRenderedDOMComponentWithClass(subject, "modal-input-name"),
+      send_btn   = TestUtils.findRenderedDOMComponentWithClass(subject, "modal-send");
+    spyOn(subject, "hideModal");
+    name_input.value = "Kota";
+    TestUtils.Simulate.change(name_input);
+    TestUtils.Simulate.click(send_btn);
+
+    expect(subject.hideModal).toHaveBeenCalled();
+
+    calls = ScheduleStore.createEvent.mock.calls;
+    expect(calls[calls.length-1][0]).toEqual("0");
+    expect(calls[calls.length-1][1]).toEqual("Kota");
+    expect(calls[calls.length-1][2]).toEqual(data.schedule);
+
+    calls = ScheduleStore.switchCalendar.mock.calls;
+    expect(calls[calls.length-1][0]).toEqual("0");
+  });
+
 });
-    
-  
