@@ -5,12 +5,67 @@ describe( 'MemDb', function () {
   var MemDB    = require('../client/app/mem_db');
   var FakeData = require('../client/app/fake_data');
 
-  describe ( 'insert data', function () {
-    var expected = FakeData.getFakeEventData();
-    it ( 'should insert and retrieve data', function () {
-      MemDB.insert(0, expected);
-      expect(MemDB.find(0)).toEqual(expected);
+  var before;
+  beforeEach( function () {
+    before = JSON.parse(JSON.stringify(MemDB.data));
+  });
+
+  afterEach( function () {
+    MemDB.data = before;
+  });
+
+  describe( 'genEventID', function () {
+    it ( 'should generate 24 char ID with alphabet[a-z]', function () {
+      expect(MemDB.genId(24).length).toBe(24);
     });
   });
+
+  describe ( 'Create and find event', function () {
+    it ( 'should create event in memDB', function () {
+      var id,
+        dummyid  = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX",
+        expected = {
+          id     : dummyid,
+          leader : null,
+          member : {}
+        };
+      spyOn(MemDB, "genId").andReturn(dummyid);
+      id = MemDB.createEvent();
+      expect(id).toEqual(dummyid);
+      expect(MemDB.readEvent(id)).toEqual(expected);
+    });
+  });
+
+  describe ( 'Create and find user', function () {
+
+    var event_id;
+    beforeEach( function () {
+      event_id = MemDB.createEvent();
+    });
+
+    it ( 'should create user in memDB', function () {
+      var
+        schedule  = [1,2,3],
+        leader_name = "Ishimoto",
+        user_name   = "Kota",
+        leader_id   = MemDB.createUser(event_id, leader_name, schedule, true),
+        user_id     = MemDB.createUser(event_id, user_name, schedule, false);
+      expect(MemDB.readUser(event_id, leader_id)).toEqual(
+        { id:leader_id, name:leader_name, schedule:schedule,leader:true} );
+      expect(MemDB.readUser(event_id, user_id)).toEqual(
+        { id:user_id, name:user_name, schedule:schedule,leader:false } );
+    });
+
+    it ( 'should not create same name user', function () {
+      var success_id, error_id,
+        name     = "Ishimo",
+        schedule = [1,2,3];
+      success_id = MemDB.createUser(event_id, name, schedule);
+      expect(success_id.length).toBe(8);
+      error_id   = MemDB.createUser(event_id, name, schedule);
+      expect(error_id).toEqual("-1");
+    });
+  });
+
 
 });
