@@ -2,8 +2,10 @@ jest.dontMock('../client/app/mem_db')
 jest.dontMock('../client/app/fake_data');
 
 describe( 'MemDb', function () {
+  var _        = require('underscore');
   var MemDB    = require('../client/app/mem_db');
   var FakeData = require('../client/app/fake_data');
+  var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
   var before;
   beforeEach( function () {
@@ -67,5 +69,18 @@ describe( 'MemDb', function () {
     });
   });
 
+  describe ( 'get event data from fake server', function () {
+    it ( 'should fetch event data from server', function () {
+      var calls,
+        eid      = "abcdefgh",
+        expected = FakeData.getFakeEventData();
+      expected.id = eid;
+      _.extend(expected, { leader : expected.member[0].id });
+      MemDB.loadEventData(eid);
+      calls = ScheduleActions.updateEvent.mock.calls;
+      expect(MemDB.readEvent(eid)).toEqual(expected);
+      expect(calls[calls.length-1]).toEqual([eid]);
+    });
+  });
 
 });

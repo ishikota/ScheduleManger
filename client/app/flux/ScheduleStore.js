@@ -16,8 +16,9 @@ var ScheduleStore = function() {
       });
 
   this.event_data = {
+    id : null,
     account  : {
-      id   : -1,
+      id   : null,
       name : null
     },
     calendar : {
@@ -55,19 +56,19 @@ ScheduleStore.prototype.removeChangeListener = function(callback) {
  *  id = else returns calendar of whose id is passed one
  */
 ScheduleStore.prototype.switchCalendar = function ( id ) {
-  var new_schedule;
+  var new_schedule,
+    event_id = this.event_data.id;
   switch ( id ) {
     case "-1":
-      var event_id = "0";
       var filter   = this.event_data.calendar.filter;
       new_schedule = this.calcEventSchedule(event_id, filter);
       break;
     case "0":
       id = this.event_data.account.id
-      new_schedule = MemDB.find("0").member[id].schedule;
+      new_schedule = MemDB.readEvent(event_id).member[id].schedule;
       break;
     default:
-      new_schedule = MemDB.find("0").member[id].schedule;
+      new_schedule = MemDB.readEvent(event_id).member[id].schedule;
   }
   this.event_data.calendar.owner_id = id;
   this.event_data.calendar.schedule = new_schedule;
@@ -80,6 +81,11 @@ ScheduleStore.prototype.changeCalendar = function ( data ) {
   _.extend(this.event_data.calendar, data);
   console.log("data: "+JSON.stringify(this.event_data));
   this.emitChange();
+}
+
+ScheduleStore.prototype.updateEvent = function ( event_id ) {
+  this.event_data.id = event_id;
+  this.switchCalendar("-1");
 }
 
 ScheduleStore.prototype.updateSchedule = function ( data ) {
@@ -127,9 +133,9 @@ ScheduleStore.prototype.receiveInputState = function(callback) {
 
 // business logic method
 
-ScheduleStore.prototype.calcEventSchedule = function ( room_id, filter ) {
+ScheduleStore.prototype.calcEventSchedule = function ( event_id, filter ) {
   var i,
-    data      = MemDB.find(room_id),
+    data      = MemDB.readEvent(event_id),
     members   = data.member,
     schedule  = _.map(_.range(12), function () {
       return _.map(_.range(32), function () { return 1; })

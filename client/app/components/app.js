@@ -14,6 +14,9 @@ Dispatcher.register( function ( payload ) {
     case ScheduleConstants.UPDATE_SCHEDULE:
       ScheduleStore.updateSchedule( payload.data );
       break;
+    case ScheduleConstants.UPDATE_EVENT:
+      ScheduleStore.updateEvent( payload.data );
+      break;
     case ScheduleConstants.EDIT_CALENDAR:
       ScheduleStore.changeState( payload.data );
       break;

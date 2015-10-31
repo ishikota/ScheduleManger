@@ -156,6 +156,7 @@ describe( 'ScheduleStore', function () {
       before_cal = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
       before_acc = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
       mockFunc = jest.genMockFunction();
+      ScheduleStore.event_data.id = "abcdefgh";
       ScheduleStore.event_data.account = { id:"1", name:"Kota" };
     });
 
@@ -169,7 +170,7 @@ describe( 'ScheduleStore', function () {
       var ans  = JSON.parse(JSON.stringify(answer));
       ans[9][6] = 0;
       data.member[0].schedule[9][6] = 0;
-      spyOn(MemDB, "find").andReturn(data);
+      spyOn(MemDB, "readEvent").andReturn(data);
       ScheduleStore.switchCalendar("-1");
       ScheduleStore.receiveCalendarData(mockFunc);
       expect(mockFunc).toBeCalledWith({
@@ -181,7 +182,7 @@ describe( 'ScheduleStore', function () {
 
     it ( 'should switch calendar to mine', function () {
       var dummyObj = { member:{"1":{schedule:[1]},"2":{schedule:[2]} } };
-      spyOn(MemDB, "find").andReturn(dummyObj);
+      spyOn(MemDB, "readEvent").andReturn(dummyObj);
       ScheduleStore.switchCalendar("0");
       ScheduleStore.receiveCalendarData(mockFunc);
       expect(mockFunc).toBeCalledWith({
@@ -193,7 +194,7 @@ describe( 'ScheduleStore', function () {
 
     it ( 'should switch calendar to his', function () {
       var dummyObj = { member:{"1":{schedule:[1]},"2":{schedule:[2]} } };
-      spyOn(MemDB, "find").andReturn(dummyObj);
+      spyOn(MemDB, "readEvent").andReturn(dummyObj);
       ScheduleStore.switchCalendar("2");
       expect(ScheduleStore.event_data.calendar).toEqual(
         {
@@ -220,8 +221,27 @@ describe( 'ScheduleStore', function () {
 
   describe( 'calcEventSchedule', function () {
     it ( 'should calc event schedule', function () {
-      spyOn(MemDB, "find").andReturn(FakeData.getFakeEventData());
-      expect(ScheduleStore.calcEventSchedule("0",0)).toEqual(answer);
+      var
+        eid = "abcdefgh",
+        fake_event = {
+          id     : eid,
+          leader : "Anyone",
+          member : FakeData.getFakeEventData().member
+        };
+      spyOn(MemDB, "readEvent").andReturn(fake_event);
+      expect(ScheduleStore.calcEventSchedule(eid, 0)).toEqual(answer);
+    });
+  });
+
+  describe( 'updateEvent', function () {
+    it ( 'should set new event_id and switch calendar', function () {
+      var
+        mockFunc = jest.genMockFunction(),
+        eid = "abcdefgh";
+      ScheduleStore.switchCalendar = mockFunc;
+      ScheduleStore.updateEvent(eid);
+      expect(ScheduleStore.event_data.id).toEqual(eid);
+      expect(mockFunc).toBeCalledWith("-1");
     });
   });
 

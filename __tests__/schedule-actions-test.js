@@ -27,6 +27,15 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
+    it ( 'should dispatch update event request', function () {
+      var event_id = "abcdefgh";
+      ScheduleActions.updateEvent(event_id);
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.UPDATE_EVENT,
+        data       : event_id
+      });
+    });
+
   });
 
 });

@@ -14,6 +14,12 @@ var ScheduleActions = {
       data       : data_map
     });
   },
+  updateEvent    : function ( event_id ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.UPDATE_EVENT,
+      data       : event_id
+    });
+  },
   switchCalendar : function ( id ) {
     Dispatcher.dispatch({
       actionType : ScheduleConstants.EDIT_CALENDAR,

@@ -1,3 +1,5 @@
+var FakeData = require('./fake_data');
+var ScheduleActions = require('./flux/ScheduleActions');
 
 var MemDB = function () {
   this.data = {};
@@ -10,6 +12,17 @@ MemDB.prototype.genId = function ( length ) {
     retVal += charset.charAt(Math.floor(Math.random() * n));
   }
   return retVal;
+}
+
+// TODO: replace this method with real server communication
+MemDB.prototype.loadEventData = function ( event_id ) {
+  var event_data = FakeData.getFakeEventData();
+  this.data[event_id] = {
+    id     : event_id,
+    leader : event_data.member[0].id,
+    member : event_data.member
+  };
+  ScheduleActions.updateEvent(event_id);
 }
 
 MemDB.prototype.createEvent = function () {

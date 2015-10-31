@@ -1,11 +1,17 @@
 var React = require('react');
+var MemDB = require('../mem_db');
 var Calendar          = require("./calendar");
 var SchedulePanel     = require("./schedule_panel");
 var ScheduleActions   = require("../flux/ScheduleActions");
 
 var Main = React.createClass({
+  componentDidMount : function () {
+    const id = this.props.params.id;
+    console.log("param:id "+this.props.params.id);
+    MemDB.loadEventData(id);
+  },
   render : function () {
-    var 
+    var y, m, st,
       cd = this.props.data.cal_data,
       pd = this.props.data.panel_data;
    

@@ -13,7 +13,7 @@ var app_router= (
     <Router>
       <Route path="/" component={App}>
         <IndexRoute component={Welcome}/>
-        <Route path="event" component={Main}/>
+        <Route path="event/:id" component={Main}/>
       </Route>
     </Router>
     );
