@@ -131,6 +131,13 @@ ScheduleStore.prototype.receiveInputState = function(callback) {
   callback(info);
 }
 
+ScheduleStore.prototype.receiveEventData  = function(callback) {
+  if ( this.event_data.id != null ) {
+    var data = MemDB.readEvent(this.event_data.id);
+    callback(data);
+  }
+}
+
 // business logic method
 
 ScheduleStore.prototype.calcEventSchedule = function ( event_id, filter ) {

@@ -1,22 +1,29 @@
 var React = require('react');
 var TEXT  = require('../text_content');
 var ShareModalBody = require('./share_modal_body');
+var MainModalBody  = require('./main_modal_body');
 
 var Modal = React.createClass({
   propTypes : {
-    mode  : React.PropTypes.number.isRequired,
-    data  : React.PropTypes.object.isRequired
+    mode : React.PropTypes.number.isRequired,
+    data : React.PropTypes.object.isRequired
   },
-  renderBody : function ( mode ) {
+  renderBody : function ( mode, data ) {
     switch ( mode ) {
-      case 0 : return <ShareModalBody data={this.props.data}/>;
-      case 1 : return <ShareModalBody data={this.props.data}/>;
+      case 0 :
+        if ( !data.id ) { return <span/> }
+        return <MainModalBody  event_id={data.id}/>;
+      case 1 : return <ShareModalBody data={data}/>;
     }
   },
-  getTitle : function ( mode ) {
+  getTitle : function ( mode, data ) {
     switch ( mode ) {
-      case 0 : return "Let's Share";
-      case 1 : return TEXT.SHARE_TITLE;
+      case 0 :
+        if ( !data.id ) { return "Error" }
+        var leader_name = data.member[data.leader].name;
+        return leader_name + " " +TEXT.LOGIN_TITLE;
+      case 1 :
+        return TEXT.SHARE_TITLE;
     }
   },
   render : function () {
@@ -31,10 +38,10 @@ var Modal = React.createClass({
                 <span aria-hidden="true">&times;</span>
               </button>
               <h4 className="modal-title" id="modalLabel">
-                {this.getTitle(this.props.mode)}
+                {this.getTitle(this.props.mode, this.props.data)}
               </h4>
               <div className="modal-body">
-                {this.renderBody(this.props.mode)}
+                {this.renderBody(this.props.mode, this.props.data)}
               </div>
             </div>
           </div>

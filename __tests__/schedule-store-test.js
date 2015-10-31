@@ -245,4 +245,16 @@ describe( 'ScheduleStore', function () {
     });
   });
 
+  describe( 'receiveEventData', function () {
+    it ( 'should pass memdb event data to callback', function () {
+      var
+        before = ScheduleStore.event_data.id,
+        mockFunc = jest.genMockFunction();
+      ScheduleStore.event_data.id = "0";
+      ScheduleStore.receiveEventData(mockFunc);
+      expect(mockFunc).toBeCalled();
+      expect(MemDB.readEvent.mock.calls[0][0]).toEqual("0");
+    });
+  });
+
 });

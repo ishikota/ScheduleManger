@@ -15,14 +15,20 @@ MemDB.prototype.genId = function ( length ) {
 }
 
 // TODO: replace this method with real server communication
+// TODO: memdb_test(should fetch event...) is now disabling
+//      ( because I do not how to test async method )
 MemDB.prototype.loadEventData = function ( event_id ) {
-  var event_data = FakeData.getFakeEventData();
-  this.data[event_id] = {
-    id     : event_id,
-    leader : event_data.member[0].id,
-    member : event_data.member
-  };
-  ScheduleActions.updateEvent(event_id);
+  setTimeout( function () {
+    var event_data = FakeData.getFakeEventData();
+    this.data[event_id] = {
+      id     : event_id,
+      leader : event_data.member[0].id,
+      member : event_data.member
+    };
+    // TODO : check if already account is set
+    $('#modal').modal('show');
+    ScheduleActions.updateEvent(event_id);
+  }.bind(this), 500);
 }
 
 MemDB.prototype.createEvent = function () {

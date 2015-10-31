@@ -37,12 +37,17 @@ var App = React.createClass({
       console.log("receive input state : "+JSON.stringify(data));
       this.setState( { input_state : data } );
     }.bind(this));
+    ScheduleStore.receiveEventData( function( data ){
+      console.log("receive event data : "+JSON.stringify(data));
+      this.setState( { event_data : data } );
+    }.bind(this));
   },
   getInitialState : function () {
     return {
       cal_data    : { owner_id : null }, // need for before receiveCalendar
       panel_data  : null,
-      input_state : { numer : 0, denom : 100 }
+      input_state : { numer : 0, denom : 100 },
+      event_data  : { id : null } // need for before receiveCalendar
     };
   },
   componentWillMount : function () {
@@ -59,6 +64,9 @@ var App = React.createClass({
     var head_dat = mode === 0 ?
       { owner_id : this.state.cal_data.owner_id } :
       this.state.input_state;
+    var modal_dat = mode === 0 ?
+      this.state.event_data :
+      this.state.input_state;
 
     return (
       <div className='app'>
@@ -67,7 +75,7 @@ var App = React.createClass({
         <div className="main-content container">
           { React.cloneElement(this.props.children, { data : this.state }) }
         </div>
-        <Modal mode={mode} data={this.state.input_state}/>
+        <Modal mode={mode} data={modal_dat}/>
       </div>
     );
   }

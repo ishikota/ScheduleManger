@@ -6,6 +6,7 @@ describe( 'App component', function () {
   var App           = require('../client/app/components/app');
   var Main          = require('../client/app/components/main');
   var Welcome       = require('../client/app/components/welcome');
+  var Modal         = require('../client/app/components/modal');
   var Dispatcher    = require('../client/app/flux/Dispatcher');
   var ScheduleStore = require('../client/app/flux/ScheduleStore');
   var FakeData      = require('../client/app/fake_data');
@@ -73,24 +74,29 @@ describe( 'App component', function () {
     });
   });
 
-  describe( 'switch data to pass MainHeader component', function () {
+  describe( 'switch data to pass child component', function () {
 
-    it ( 'should pass owner id', function () {
+    it ( 'should pass data for main page', function () {
       var
         subject  = TestUtils.renderIntoDocument(<App><Main/></App>),
         header   = TestUtils.findRenderedComponentWithType(subject, MainHeader),
+        modal    = TestUtils.findRenderedComponentWithType(subject, Modal),
         cal_data = { year:2015, month:9, day:31, schedule:[], owner_id:"1234" },
-        expected = { owner_id : "1234" };
+        cal_expected = { owner_id : "1234" };
       subject.setState( { cal_data : cal_data } );
-      expect(header.props.data).toEqual(expected);
+      subject.setState( { event_data : { id:"a", leader:"1", member:{}} } );
+      expect(header.props.data).toEqual(cal_expected);
+      expect(modal.props.data).toEqual(subject.state.event_data);
     });
 
-    it ( 'should pass input_state', function () {
+    it ( 'should pass data for welcome page', function () {
       var
         subject = TestUtils.renderIntoDocument(<App><Welcome/></App>),
-        header  = TestUtils.findRenderedComponentWithType(subject, MainHeader);
+        header  = TestUtils.findRenderedComponentWithType(subject, MainHeader),
+        modal    = TestUtils.findRenderedComponentWithType(subject, Modal);
       subject.setState( { input_state : { schedule : [1,2,3] } } );
       expect(header.props.data).toEqual(subject.state.input_state);
+      expect(modal.props.data).toEqual(subject.state.input_state);
     });
   });
 
