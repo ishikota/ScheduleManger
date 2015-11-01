@@ -156,6 +156,7 @@ describe( 'ScheduleStore', function () {
       before_cal = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
       before_acc = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
       mockFunc = jest.genMockFunction();
+      ScheduleStore.event_data.calendar = calendar;
       ScheduleStore.event_data.id = "abcdefgh";
       ScheduleStore.event_data.account = { id:"1", name:"Kota" };
     });
@@ -199,10 +200,10 @@ describe( 'ScheduleStore', function () {
       expect(ScheduleStore.event_data.calendar).toEqual(
         {
           owner_id : "2",
-          year     : before_cal.year,
-          month    : before_cal.month,
-          day      : before_cal.day,
-          filter   : before_cal.filter,
+          year     : calendar.year,
+          month    : calendar.month,
+          day      : calendar.day,
+          filter   : calendar.filter,
           schedule : [2]
         }
       );
