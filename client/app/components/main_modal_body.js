@@ -8,53 +8,88 @@ var MainModalBody = React.createClass({
   },
   getInitialState : function () {
     return {
-      register : true,
-      name : ""
+      registering   : true,
+      login_name    : "",
+      register_name : ""
     }
   },
   render : function () {
-    var
+    var btn_msg,
       event_id = this.props.event_id,
-      valid_login = MemDB.validateUser(event_id, this.state.name),
-      btn_class = "btn btn-primary";
-    if ( !valid_login ) { btn_class += " disabled"; }
-    var btn_msg = TEXT.LOGIN_TAB_LOGIN;
+      valid_login    = !MemDB.isNewone(event_id, this.state.login_name),
+      valid_register = MemDB.isNewone(event_id, this.state.register_name),
+      login_form_class = "form-group",
+      login_help_class = "help-block hidden",
+      login_help_msg   = this.state.login_name+ " "+ TEXT.LOGIN_WARNING,
+      register_form_class = "form-group",
+      register_help_class = "help-block hidden",
+      register_help_msg   = TEXT.REGISTER_WARNING,
+      btn_class   = "btn btn-primary";
+
+
+    if ( this.state.login_name != "" & !valid_login ) {
+      login_form_class += " has-error";
+      login_help_class = "help-block";
+    }
+    if ( !valid_register ) {
+      register_form_class += " has-error";
+      register_help_class = "help-block";
+    }
+
+    if ( this.state.registering ) {
+      btn_msg = TEXT.LOGIN_TAB_REGISTER;
+      if ( this.state.register_name == "" || !valid_register ) {
+        btn_class += " disabled";
+      }
+    } else {
+      btn_msg = TEXT.LOGIN_TAB_LOGIN;
+      if ( !valid_login ) { btn_class += " disabled"; }
+    }
+
     return (
       <div>
         <div className="modal-body">
           <ul className="nav nav-tabs">
             <li className="active">
-              <a href="#register" data-toggle="tab">
-                Register
+              <a href="#register" data-toggle="tab" onClick={this.handleClick}>
+                {TEXT.LOGIN_TAB_REGISTER}
               </a>
             </li>
             <li>
-              <a href="#login" data-toggle="tab">
-                Login
+              <a href="#login" data-toggle="tab" onClick={this.handleClick}>
+                {TEXT.LOGIN_TAB_LOGIN}
               </a>
             </li>
           </ul>
           <div id="loginTabContent" className="tab-content">
             <div className="tab-pane fade in active" id="register">
-              <div className="form-group">
+              <div className={register_form_class}>
                 <label forName="recipient-name"
                        className="control-label">
                   {TEXT.SHARE_NAME_LABEL}
                 </label>
                 <input type="text"
                        className="form-control register" id="recipient-name"
-                       onChange={this.handleChange} placeholder="Your name here"/>
+                       onChange={this.handleChange} placeholder="Your name here"
+                       area-describedby="help-register"/>
+                <span id="help-register" className={register_help_class}>
+                  {register_help_msg}
+                </span>
               </div>
             </div>
             <div className="tab-pane fade" id="login">
-              <div className="form-group">
+              <div className={login_form_class}>
                 <label forName="recipient-name"
                        className="control-label">
                   {TEXT.SHARE_NAME_LABEL}
                 </label>
                 <input type="text"
                        className="form-control login" id="recipient-name"
-                       onChange={this.handleChange} placeholder="Your name here"/>
+                       onChange={this.handleChange} placeholder="Your name here"
+                       area-describedby="help-login"/>
+                <span id="help-login" className={login_help_class}>
+                  {login_help_msg}
+                </span>
               </div>
             </div>
           </div>
@@ -68,7 +103,15 @@ var MainModalBody = React.createClass({
     );
   },
   handleChange : function ( ev ) {
-    this.setState( { name : ev.target.value } );
+    if ( ev.target.className == "form-control register" ) {
+      this.setState( { register_name : ev.target.value } );
+    } else {
+      this.setState( { login_name    : ev.target.value } );
+    }
+  },
+  handleClick : function ( ev ) {
+    var is_register_mode= ev.target.textContent == TEXT.LOGIN_TAB_REGISTER;
+    this.setState( { registering : is_register_mode } );
   }
 });
 

@@ -20,8 +20,11 @@ module.exports = {
   SHARE_TMPLATE_4 : "参加できそうな日を以下のURL先のカレンダーに入力してください!!!\n",
   SHARE_TMPLATE_5 : "http://xxx.xxx.xx",
 
-  LOGIN_TITLE : "さんのイベントへようこそ",
-  LOGIN_TAB_LOGIN : "ログイン",
-  LOGIN_TAB_REGISTER : "登録"
+  LOGIN_TITLE        : "さんのイベントへようこそ",
+  LOGIN_TAB_LOGIN    : "ログイン",
+  LOGIN_TAB_REGISTER : "登録",
+  LOGIN_WARNING      : "さんは，このイベントに登録されていません．",
+
+  REGISTER_WARNING : "その名前はイベント内で既に使われています．"
 
 }

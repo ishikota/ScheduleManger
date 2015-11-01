@@ -45,7 +45,7 @@ MemDB.prototype.readEvent = function ( event_id ) {
   return this.data[event_id];
 }
 
-MemDB.prototype.validateUser = function ( event_id, name ) {
+MemDB.prototype.isNewone= function ( event_id, name ) {
   var res = true;
   for ( var id in this.data[event_id].member ) {
     res &= ( name != this.data[event_id].member[id].name );
@@ -55,7 +55,7 @@ MemDB.prototype.validateUser = function ( event_id, name ) {
 
 MemDB.prototype.createUser = function( event_id, name, schedule, is_leader ) {
   // user name in event must be unique
-  if ( !this.validateUser( event_id, name ) ) {
+  if ( !this.isNewone( event_id, name ) ) {
     return "-1";
   }
   var user_id = this.genId(8);
