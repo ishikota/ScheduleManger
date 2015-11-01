@@ -25,6 +25,26 @@ var ScheduleActions = {
       actionType : ScheduleConstants.EDIT_CALENDAR,
       data       : id
     });
+  },
+  registerAccount : function ( event_id, user_name, callback ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.REGISTER_ACCOUNT,
+      data       : {
+        event_id  : event_id,
+        user_name : user_name,
+        callback  : callback
+      }
+    });
+  },
+  loginAccount : function ( event_id, user_name, callback ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.LOGIN_ACCOUNT,
+      data       : {
+        event_id  : event_id,
+        user_name : user_name,
+        callback  : callback
+      }
+    });
   }
 }
 

@@ -20,6 +20,14 @@ Dispatcher.register( function ( payload ) {
     case ScheduleConstants.EDIT_CALENDAR:
       ScheduleStore.changeState( payload.data );
       break;
+    case ScheduleConstants.REGISTER_ACCOUNT:
+      ScheduleStore.registerAccount(
+        payload.data.event_id, payload.data.user_name, payload.data.callback);
+      break;
+    case ScheduleConstants.LOGIN_ACCOUNT:
+      ScheduleStore.loginAccount(
+        payload.data.event_id, payload.data.user_name, payload.data.callback);
+      break;
   }
 });
 

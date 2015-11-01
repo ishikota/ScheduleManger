@@ -24,6 +24,14 @@ describe( 'ScheduleStore', function () {
         [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
 
+  var getEmptySchedule = function () {
+    return _.map(_.range(12), function () {
+      return _.map(_.range(32), function () {
+        return 0;
+      })
+    });
+  };
+
   describe ( 'basic function', function () {
     var before;
     beforeEach( function () {
@@ -103,7 +111,7 @@ describe( 'ScheduleStore', function () {
     it ( "should provide current store state", function () {
       var cal  = ScheduleStore.event_data.calendar,
           clbk = jest.genMockFunction(),
-          expected = { 
+          expected = {
             owner_id : cal.owner_id,
             date     : { year : 2015 , month : 9},
             schedule : [1,0,0,1,1]
@@ -147,6 +155,41 @@ describe( 'ScheduleStore', function () {
       target = MemDB.insert.mock.calls;
       expect(target[target.length-1][0]).toBe(0);
       expect(target[target.length-1][1]).toEqual(expected);
+    });
+  });
+
+  describe( 'registerAccount', function () {
+    it ( 'should insert account data into memDB and set account', function () {
+      var
+        eid = "abc",
+        name = "kota",
+        callback = jest.genMockFunction(),
+        schedule = getEmptySchedule();
+
+      spyOn(MemDB, "createUser").andReturn("def")
+      ScheduleStore.registerAccount(eid, name, callback);
+      expect(ScheduleStore.event_data.account.id).toEqual("def");
+      expect(ScheduleStore.event_data.account.name).toEqual(name);
+      expect(MemDB.createUser)
+              .toHaveBeenCalledWith( eid, name, schedule, false);
+      expect(callback).toBeCalledWith({ status:true, user_id:"def" } );
+    });
+  });
+
+  describe( 'loginAccount', function () {
+    it ('should read account data from memDB and set account', function () {
+      var
+        eid = "abc",
+        name = "kota",
+        callback = jest.genMockFunction(),
+        schedule = getEmptySchedule();
+      spyOn(MemDB, "readUserByName").andReturn(
+        {id:"def", name:"kota", schedule:schedule, leader:false}
+      );
+      ScheduleStore.loginAccount(eid, name, callback);
+      expect(ScheduleStore.event_data.account.id).toEqual("def");
+      expect(ScheduleStore.event_data.account.name).toEqual(name);
+      expect(MemDB.readUserByName).toHaveBeenCalledWith(eid, name);
     });
   });
 

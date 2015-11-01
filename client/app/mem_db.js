@@ -72,6 +72,14 @@ MemDB.prototype.readUser = function ( event_id, user_id ) {
   return this.data[event_id].member[user_id];
 }
 
+MemDB.prototype.readUserByName = function ( event_id, user_name ) {
+  for ( var id in this.data[event_id].member ) {
+    if ( this.data[event_id].member[id].name == user_name ) {
+      return this.data[event_id].member[id];
+    }
+  }
+};
+
 
 MemDB.prototype.insert = function ( id, data ) {
   this.data.id = data;

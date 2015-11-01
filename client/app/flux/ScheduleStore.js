@@ -110,6 +110,31 @@ ScheduleStore.prototype.login = function ( id, name ) {
   this.event_data.account.name = name;
 }
 
+ScheduleStore.prototype.registerAccount
+        = function ( event_id, user_name, callback ) {
+  var user_id,
+    empty_schedule = _.map(_.range(12), function () {
+      return _.map(_.range(32), function () {
+        return 0;
+      })
+    });
+  user_id = MemDB.createUser(
+      event_id, user_name, empty_schedule, false );
+  this.event_data.account.id   = user_id;
+  this.event_data.account.name = user_name;
+  callback( { status:true, user_id:user_id } );
+}
+
+ScheduleStore.prototype.loginAccount
+        = function ( event_id, user_name, callback ) {
+  var user = MemDB.readUserByName(event_id, user_name);
+  if ( !user ) {
+    callback( { status : false, user_id : null } );
+  } else {
+    callback( { status : true, user_id : user.id });
+  }
+}
+
 // API methods
 ScheduleStore.prototype.receiveCalendarData = function(callback) {
   var cal  = this.event_data.calendar,

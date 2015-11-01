@@ -36,6 +36,36 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
+    it ( 'should dispatch create new account request', function () {
+      var event_id  = "abcdefgh";
+      var user_name = "Kota";
+      var callback  = { dummy : true };
+      ScheduleActions.registerAccount(event_id, user_name, callback);
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.REGISTER_ACCOUNT,
+        data       : {
+          event_id:event_id,
+          user_name:user_name,
+          callback:callback
+        }
+      });
+    });
+
+    it ( 'should dispatch login account request', function () {
+      var event_id  = "abcdefgh";
+      var user_name = "Kota";
+      var callback  = { dummy : true };
+      ScheduleActions.loginAccount(event_id, user_name, callback);
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.LOGIN_ACCOUNT,
+        data       : {
+          event_id:event_id,
+          user_name:user_name,
+          callback:callback
+        }
+      });
+    });
+
   });
 
 });

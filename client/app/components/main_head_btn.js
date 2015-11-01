@@ -16,7 +16,7 @@ var MainHeadBtn = React.createClass({
     );
   },
   handleClick : function (ev) {
-    var next_id = this.props.data.owner_id == "0" ? "-1" : "0";
+    var next_id = this.props.data.owner_id == "-1" ? "0" : "-1";
     ScheduleStore.switchCalendar(next_id);
   }
 });

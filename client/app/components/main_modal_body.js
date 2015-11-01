@@ -1,6 +1,7 @@
 var React = require('react');
 var TEXT  = require('../text_content');
 var MemDB = require('../mem_db');
+var ScheduleActions = require('../flux/ScheduleActions');
 
 var MainModalBody = React.createClass({
   propTypes : {
@@ -95,7 +96,7 @@ var MainModalBody = React.createClass({
           </div>
         </div>
         <div className="modal-footer">
-          <button type="button" className={btn_class}>
+          <button type="button" className={btn_class} onClick={this.handleSend}>
             {btn_msg}
           </button>
         </div>
@@ -112,7 +113,30 @@ var MainModalBody = React.createClass({
   handleClick : function ( ev ) {
     var is_register_mode= ev.target.textContent == TEXT.LOGIN_TAB_REGISTER;
     this.setState( { registering : is_register_mode } );
-  }
+  },
+  handleSend : function ( ev ) {
+    var callback  = function ( res ) {
+      console.log("callback status:"+res.status);
+      console.log("callback uid:"+res.user_id);
+      if ( res.status ) {
+        this.hideModal();
+      }
+    }.bind(this);
+    if ( this.state.registering ) {
+      ScheduleActions.registerAccount(
+          this.props.event_id,
+          this.state.register_name,
+          callback );
+    } else {
+      ScheduleActions.loginAccount(
+          this.props.event_id,
+          this.state.login_name,
+          callback );
+    }
+  },
+  hideModal : function () {
+    $('#modal').modal('hide');
+  },
 });
 
 module.exports = MainModalBody;

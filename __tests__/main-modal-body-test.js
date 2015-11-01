@@ -2,11 +2,12 @@ jest.dontMock('../client/app/components/main_modal_body');
 jest.dontMock('../client/app/mem_db');
 
 describe ( 'MainModalBody components', function () {
-  var React          = require('react/addons');
-  var TestUtils      = React.addons.TestUtils;
-  var MemDB          = require('../client/app/mem_db');
-  var MainModalBody  = require('../client/app/components/main_modal_body');
-  var TEXT           = require('../client/app/text_content');
+  var React           = require('react/addons');
+  var TestUtils       = React.addons.TestUtils;
+  var MemDB           = require('../client/app/mem_db');
+  var MainModalBody   = require('../client/app/components/main_modal_body');
+  var TEXT            = require('../client/app/text_content');
+  var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
   describe( 'Check state change while user input', function () {
     var eid, subject, name_input, send_btn, hints, hint, tabs;
@@ -74,6 +75,26 @@ describe ( 'MainModalBody components', function () {
       stateTest("login");
       stateTest("register");
     });
-  });
 
+    describe ( 'should send pay load when valid name is given', function () {
+      var calls;
+      it ( 'should register account', function () {
+        subject.state.registering   = true;
+        subject.state.register_name = "Mikel";
+        subject.handleSend( { dummy_event : true } );
+        calls = ScheduleActions.registerAccount.mock.calls;
+        expect(calls[calls.length-1][0]).toEqual(eid);
+        expect(calls[calls.length-1][1]).toEqual("Mikel");
+      });
+
+      it ( 'should login account', function () {
+        subject.state.registering   = false;
+        subject.state.login_name = "Mike";
+        subject.handleSend( { dummy_event : true } );
+        calls = ScheduleActions.loginAccount.mock.calls;
+        expect(calls[calls.length-1][0]).toEqual(eid);
+        expect(calls[calls.length-1][1]).toEqual("Mike");
+      });
+    });
+  });
 });
