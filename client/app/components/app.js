@@ -28,6 +28,11 @@ Dispatcher.register( function ( payload ) {
       ScheduleStore.loginAccount(
         payload.data.event_id, payload.data.user_name, payload.data.callback);
       break;
+    case ScheduleConstants.CREATE_EVENT:
+      var dat = payload.data;
+      ScheduleStore.createEvent(
+          dat.leader_name, dat.leader_schedule, dat.callback);
+      break;
   }
 });
 

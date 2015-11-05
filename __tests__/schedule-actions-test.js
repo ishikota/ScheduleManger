@@ -66,6 +66,22 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
+    it ( 'should dispatch creat event request', function () {
+      var leader_name = "Kota";
+      var leader_schedule = [];
+      var callback = { dummy : true };
+      ScheduleActions.createEvent(leader_name, leader_schedule, callback);
+      console.log(JSON.stringify(Dispatcher.dispatch.mock.calls))
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.CREATE_EVENT,
+        data       : {
+          leader_name     : leader_name,
+          leader_schedule : leader_schedule,
+          callback        : callback
+        }
+      });
+    });
+
   });
 
 });

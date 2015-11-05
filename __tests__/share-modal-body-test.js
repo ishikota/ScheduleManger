@@ -2,13 +2,13 @@ jest.dontMock('../client/app/components/share_modal_body');
 jest.dontMock('../client/app/fake_data');
 
 describe ( 'ShareModalBody component', function () {
-  var React          = require('react/addons');
-  var TestUtils      = React.addons.TestUtils;
-  var ShareModalBody = require('../client/app/components/share_modal_body');
-  var ScheduleStore  = require('../client/app/flux/ScheduleStore');
-  var TEXT           = require('../client/app/text_content');
-  var FakeData       = require('../client/app/fake_data');
-  //var $ = require('jquery');
+  var React           = require('react/addons');
+  var TestUtils       = React.addons.TestUtils;
+  var ShareModalBody  = require('../client/app/components/share_modal_body');
+  var ScheduleStore   = require('../client/app/flux/ScheduleStore');
+  var TEXT            = require('../client/app/text_content');
+  var FakeData        = require('../client/app/fake_data');
+  var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
   var subject, data = { numer:2, denom:32, schedule : FakeData.getEventData().schedule };
 
@@ -48,19 +48,10 @@ describe ( 'ShareModalBody component', function () {
     TestUtils.Simulate.change(name_input);
     TestUtils.Simulate.click(send_btn);
 
-    expect(subject.hideModal).toHaveBeenCalled();
-
-    calls = ScheduleStore.createEvent.mock.calls;
-    expect(calls[calls.length-1][0]).toEqual("0");
-    expect(calls[calls.length-1][1]).toEqual("Kota");
-    expect(calls[calls.length-1][2]).toEqual(data.schedule);
-
-    calls = ScheduleStore.switchCalendar.mock.calls;
-    expect(calls[calls.length-1][0]).toEqual("0");
-
-    calls = ScheduleStore.login.mock.calls;
-    expect(calls[calls.length-1][0]).toEqual("1");
-    expect(calls[calls.length-1][1]).toEqual("Kota");
+    calls = ScheduleActions.createEvent.mock.calls;
+    expect(calls[calls.length-1][0]).toEqual("Kota");
+    expect(calls[calls.length-1][1]).toEqual(data.schedule);
+    expect(calls[calls.length-1][2]).toEqual(jasmine.any(Function));
   });
 
 });

@@ -95,14 +95,16 @@ ScheduleStore.prototype.updateSchedule = function ( data ) {
   this.emitChange();
 }
 
-ScheduleStore.prototype.createEvent = function ( id, leader_name, leader_schedule ) {
-  var event_data = {
-    id : id,
-    member : {
-      "0" : { id : "0", name:leader_name, schedule:leader_schedule }
-    }
-  };
-  MemDB.insert(0,event_data);
+ScheduleStore.prototype.createEvent
+        = function ( leader_name, leader_schedule, callback) {
+  var event_id, leader_id;
+  event_id= MemDB.createEvent();
+  leader_id = MemDB.createUser(event_id, leader_name, leader_schedule, true);
+  callback({
+    status    : event_id && leader_id != "-1",
+    event_id  : event_id,
+    leader_id : leader_id
+  });
 }
 
 ScheduleStore.prototype.login = function ( id, name ) {

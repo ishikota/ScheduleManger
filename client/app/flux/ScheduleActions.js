@@ -45,6 +45,16 @@ var ScheduleActions = {
         callback  : callback
       }
     });
+  },
+  createEvent : function( leader_name, leader_schedule, callback ) {
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.CREATE_EVENT,
+      data       : {
+        leader_name     : leader_name,
+        leader_schedule : leader_schedule,
+        callback        : callback
+      }
+    });
   }
 }
 

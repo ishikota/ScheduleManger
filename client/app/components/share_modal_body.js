@@ -1,6 +1,6 @@
 var React = require('react');
 var TEXT  = require('../text_content');
-var ScheduleStore = require('../flux/ScheduleStore');
+var ScheduleActions = require('../flux/ScheduleActions');
 
 var ShareModalBody = React.createClass({
   propTypes : {
@@ -55,10 +55,17 @@ var ShareModalBody = React.createClass({
     /* needed to surpress jest warning */
   },
   handleClick : function ( ev ) {
-    this.hideModal();
-    ScheduleStore.createEvent("0", this.state.name, this.props.data.schedule);
-    ScheduleStore.login("1", this.state.name);
-    ScheduleStore.switchCalendar("0");
+    var callback = function ( data ) {
+      if ( data.status ) {
+        console.log(
+            "Event created with id : %s, leader_id : %s", data.event_id, data.leader_id);
+        this.hideModal();
+      } else {
+        console.log("event crate failed");
+      }
+    }.bind(this);
+    ScheduleActions.createEvent(
+        this.state.name, this.props.data.schedule, callback);
   },
   hideModal : function () {
     $('#modal').modal('hide');

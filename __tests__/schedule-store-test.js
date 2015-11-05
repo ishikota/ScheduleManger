@@ -149,12 +149,19 @@ describe( 'ScheduleStore', function () {
   describe( 'createEvent', function () {
     it ( 'should save event in MemDB', function () {
       var target,
-        schedule = FakeData.getFakeEventData().member[0].schedule,
-        expected = { id:"0", member:[{ id:"0",name:"Kota",schedule:schedule}] };
-      ScheduleStore.createEvent( "0", "Kota", schedule );
-      target = MemDB.insert.mock.calls;
-      expect(target[target.length-1][0]).toBe(0);
-      expect(target[target.length-1][1]).toEqual(expected);
+        dummy_event_id = "12345",
+        leader_name = "Kota",
+        leader_schedule = FakeData.getFakeEventData().member[0].schedule,
+        callback = jest.genMockFunction(),
+        mockFunc = jest.genMockFunction(),
+        expected = { status : true, event_id : "abc", leader_id : "def" };
+      mockFunc.mockReturnValueOnce("abc")
+        .mockReturnValueOnce("def");
+      MemDB.createEvent = mockFunc;
+      MemDB.createUser = mockFunc;
+      ScheduleStore.createEvent(leader_name, leader_schedule, callback);
+      expect(mockFunc).toBeCalledWith("abc", leader_name, leader_schedule, true);
+      expect(callback).toBeCalledWith(expected);
     });
   });
 
