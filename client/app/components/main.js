@@ -3,12 +3,20 @@ var React = require('react');
 var MemDB = require('../mem_db');
 var Calendar          = require("./calendar");
 var SchedulePanel     = require("./schedule_panel");
+var ScheduleStore    = require("../flux/ScheduleStore");
 var ScheduleActions   = require("../flux/ScheduleActions");
 
 var Main = React.createClass({
   componentDidMount : function () {
     const id = this.props.params.id;
-    MemDB.loadEventData(id);
+    var callback = function () {
+      ScheduleActions.updateEvent(id);
+      // if comes from welcome page, do not show login modal
+      if( ScheduleStore.event_data.account.id == null ) {
+        $('#modal').modal('show');
+      }
+    };
+    MemDB.loadEventData(id, callback);
   },
   render : function () {
     var y, m, st,

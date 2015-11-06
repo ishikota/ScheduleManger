@@ -11,7 +11,7 @@ describe( 'Calendar Header component' , function () {
   var ScheduleActions = require('../client/app/flux/ScheduleActions');
 
   describe( 'basic spec check', function () {
-    var schedule = FakeData.getFakeEventData().member[0].schedule;
+    var schedule = FakeData.getFakeEventData().member["1"].schedule;
 
     it ('should pass props to children', function () {
       var mockFunc = jest.genMockFunction();

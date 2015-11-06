@@ -22,7 +22,8 @@ describe( 'Main compoent', function () {
        <Main data={data} params={{id:event_id}}/>
      );
      calls = MemDB.loadEventData.mock.calls;
-     expect(calls[calls.length-1]).toEqual([event_id]);
+     expect(calls[calls.length-1][0]).toEqual(event_id);
+     expect(calls[calls.length-1][1]).toEqual(jasmine.any(Function));
   });
 
 

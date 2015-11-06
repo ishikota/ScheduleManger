@@ -147,11 +147,11 @@ describe( 'ScheduleStore', function () {
   });
 
   describe( 'createEvent', function () {
-    it ( 'should save event in MemDB', function () {
+    it ( 'should save event in MemDB and set account info', function () {
       var target,
         dummy_event_id = "12345",
         leader_name = "Kota",
-        leader_schedule = FakeData.getFakeEventData().member[0].schedule,
+        leader_schedule = FakeData.getFakeEventData().member["1"].schedule,
         callback = jest.genMockFunction(),
         mockFunc = jest.genMockFunction(),
         expected = { status : true, event_id : "abc", leader_id : "def" };
@@ -162,6 +162,9 @@ describe( 'ScheduleStore', function () {
       ScheduleStore.createEvent(leader_name, leader_schedule, callback);
       expect(mockFunc).toBeCalledWith("abc", leader_name, leader_schedule, true);
       expect(callback).toBeCalledWith(expected);
+      // check if leader data is set to event_data.account
+      expect(ScheduleStore.event_data.account.id).toEqual("def");
+      expect(ScheduleStore.event_data.account.name).toEqual(leader_name);
     });
   });
 
@@ -220,7 +223,7 @@ describe( 'ScheduleStore', function () {
       var data = FakeData.getFakeEventData();
       var ans  = JSON.parse(JSON.stringify(answer));
       ans[9][6] = 0;
-      data.member[0].schedule[9][6] = 0;
+      data.member["1"].schedule[9][6] = 0;
       spyOn(MemDB, "readEvent").andReturn(data);
       ScheduleStore.switchCalendar("-1");
       ScheduleStore.receiveCalendarData(mockFunc);
@@ -257,16 +260,6 @@ describe( 'ScheduleStore', function () {
           schedule : [2]
         }
       );
-    });
-  });
-
-  describe( 'login', function () {
-    it ( 'should set accout id and name', function () {
-      var before = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
-      ScheduleStore.login("0", "Kota");
-      expect(ScheduleStore.event_data.account.id).toEqual("0");
-      expect(ScheduleStore.event_data.account.name).toEqual("Kota");
-      ScheduleStore.event_data.account = before;
     });
   });
 

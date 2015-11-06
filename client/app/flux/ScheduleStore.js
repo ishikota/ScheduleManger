@@ -98,18 +98,18 @@ ScheduleStore.prototype.updateSchedule = function ( data ) {
 ScheduleStore.prototype.createEvent
         = function ( leader_name, leader_schedule, callback) {
   var event_id, leader_id;
+  // register event and leader to memDB
   event_id= MemDB.createEvent();
   leader_id = MemDB.createUser(event_id, leader_name, leader_schedule, true);
+  // set leader data as current account
+  this.event_data.account.id   = leader_id;
+  this.event_data.account.name = leader_name;
+  // send callback to ShareModal
   callback({
     status    : event_id && leader_id != "-1",
     event_id  : event_id,
     leader_id : leader_id
   });
-}
-
-ScheduleStore.prototype.login = function ( id, name ) {
-  this.event_data.account.id   = id;
-  this.event_data.account.name = name;
 }
 
 ScheduleStore.prototype.registerAccount
@@ -168,15 +168,15 @@ ScheduleStore.prototype.receiveEventData  = function(callback) {
 // business logic method
 
 ScheduleStore.prototype.calcEventSchedule = function ( event_id, filter ) {
-  var i,
+  var id,
     data      = MemDB.readEvent(event_id),
     members   = data.member,
     schedule  = _.map(_.range(12), function () {
       return _.map(_.range(32), function () { return 1; })
     });
 
-  for( var i=0; i<members.length; i++) {
-    var member = members[i];
+  for( id in members ) {
+    var member = members[id];
     for ( var m=0; m<schedule.length; m++ ) {
       for ( var d=0; d<schedule[m].length; d++ ) {
         schedule[m][d] &= member.schedule[m][d];

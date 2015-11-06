@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var FakeData = require('./fake_data');
 var ScheduleActions = require('./flux/ScheduleActions');
 
@@ -14,20 +15,15 @@ MemDB.prototype.genId = function ( length ) {
   return retVal;
 }
 
-// TODO: replace this method with real server communication
-// TODO: memdb_test(should fetch event...) is now disabling
-//      ( because I do not how to test async method )
-MemDB.prototype.loadEventData = function ( event_id ) {
+MemDB.prototype.loadEventData = function ( event_id, callback ) {
   setTimeout( function () {
     var event_data = FakeData.getFakeEventData();
     this.data[event_id] = {
       id     : event_id,
-      leader : event_data.member[0].id,
+      leader : event_data.member["1"].id,
       member : event_data.member
     };
-    // TODO : check if already account is set
-    $('#modal').modal('show');
-    ScheduleActions.updateEvent(event_id);
+    callback();
   }.bind(this), 500);
 }
 
