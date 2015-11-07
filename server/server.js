@@ -2,11 +2,7 @@ var
   http = require( 'http' ),
   express = require( 'express' ),
   resource = require('express-resource'),
-  // require rest resource and setup their dependency
-  app = express(),
-  events = app.resource('events', require('./rest/api/event')),
-  users  = app.resource('users', require('./rest/api/user'));
-events.add(users);
+  app = express();
 
 // db setup
 var db,mongoose;
@@ -17,7 +13,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.on('open', function( callback ) {
   console.log("mongoDB connected!!");
 });
-
 
 app.configure( function () {
   app.use( express.bodyParser() );
@@ -38,6 +33,10 @@ app.configure( 'production', function () {
   app.use( express.errorHandler() );
 });
 
+// require rest resource and setup their dependency
+var events = app.resource('events', require('./rest/api/event'));
+var users  = app.resource('users', require('./rest/api/user'));
+events.add(users);
 
 app.get('/', function ( request, response ) {
   response.redirect( '/app.html' );
