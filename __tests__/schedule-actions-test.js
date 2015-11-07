@@ -5,7 +5,6 @@ describe( 'flux architecture for schedule data flow', function () {
   var React     = require('react/addons');
   var TestUtils = React.addons.TestUtils;
   var Dispatcher = require('../client/app/flux/Dispatcher');
-  var ScheduleStore = require('../client/app/flux/ScheduleStore');
   var ScheduleActions = require('../client/app/flux/ScheduleActions');
   var ScheduleConstants = require('../client/app/flux/ScheduleConstants');
 
@@ -68,16 +67,19 @@ describe( 'flux architecture for schedule data flow', function () {
     });
 
     it ( 'should dispatch creat event request', function () {
-      var event = { _id : "abc", member : [] };
-      var user  = { _id : "def", name : "Kota", schedule : [] };
-      var callback = jest.genMockFunction();
-      spyOn(ScheduleStore, "setAccount");
-      ScheduleActions._createEventHelper( true, event, user, callback );
-      expect(ScheduleStore.setAccount).toHaveBeenCalledWith("def", "Kota");
-      expect(callback).toBeCalledWith(
-        { status : true,
-          event_id : "abc",
-          user_id  : "def" });
+      var leader_name = "Kota";
+      var leader_schedule = [];
+      var callback = { dummy : true };
+      ScheduleActions.createEvent(leader_name, leader_schedule, callback);
+      console.log(JSON.stringify(Dispatcher.dispatch.mock.calls))
+      expect(Dispatcher.dispatch).toBeCalledWith({
+        actionType : ScheduleConstants.CREATE_EVENT,
+        data       : {
+          leader_name     : leader_name,
+          leader_schedule : leader_schedule,
+          callback        : callback
+        }
+      });
     });
 
   });

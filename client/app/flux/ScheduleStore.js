@@ -95,7 +95,6 @@ ScheduleStore.prototype.updateSchedule = function ( data ) {
   this.emitChange();
 }
 
-// TODO : remove this method
 ScheduleStore.prototype.createEvent
         = function ( leader_name, leader_schedule, callback) {
   var event_id, leader_id;
@@ -111,11 +110,6 @@ ScheduleStore.prototype.createEvent
     event_id  : event_id,
     leader_id : leader_id
   });
-}
-
-ScheduleStore.prototype.setAccount = function ( user_id, user_name ) {
-  this.event_data.account.id   = user_id;
-  this.event_data.account.name = user_name;
 }
 
 ScheduleStore.prototype.registerAccount

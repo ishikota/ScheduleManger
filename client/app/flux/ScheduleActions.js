@@ -1,5 +1,4 @@
 var Dispatcher        = require("./Dispatcher");
-var ScheduleStore     = require('./ScheduleStore');
 var ScheduleConstants = require("./ScheduleConstants");
 
 var ScheduleActions = {
@@ -48,31 +47,13 @@ var ScheduleActions = {
     });
   },
   createEvent : function( leader_name, leader_schedule, callback ) {
-    $.post(
-        "http://localhost:3000/events",
-        {},
-        function (event_data, status, jqXHR) {
-          console.log("created event : "+JSON.stringify(event_data));
-          $.post(
-            "http://localhost:3000/events/"+event_data.obj._id+"/users",
-            { name : leader_name,
-              leader : true,
-              schedule : leader_schedule },
-            function( user_data, status, jqXHR ) {
-              console.log("created leader : ",user_data.obj._id);
-              _createEventHelper(
-                status, event_data.obj, user_data.obj, callback
-              );
-            });
-        }
-    );
-  },
-  _createEventHelper : function ( status, event, user, callback ) {
-    ScheduleStore.setAccount( user._id, user.name );
-    callback({
-      status : status,
-      event_id : event._id,
-      user_id  : user._id
+    Dispatcher.dispatch({
+      actionType : ScheduleConstants.CREATE_EVENT,
+      data       : {
+        leader_name     : leader_name,
+        leader_schedule : leader_schedule,
+        callback        : callback
+      }
     });
   }
 }
