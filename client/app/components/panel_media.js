@@ -7,8 +7,8 @@ var PanelMedia = React.createClass({
   },
   genIconPath : function (id) {
     switch( id ) {
-      case 0: return '../public/assets/img/yes.jpg';
-      case 1: return '../public/assets/img/budda.jpg';
+      case 0: return '/assets/img/yes.jpg';
+      case 1: return '/assets/img/budda.jpg';
     }
   },
   renderAvatars : function () {

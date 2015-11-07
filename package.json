@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/server.js",
     "build": "browserify client/client.js > public/build/bundle.js --debug",
     "watch": "watchify --debug client/client.js -v -o public/build/bundle.js",
     "test": "jest"
@@ -34,6 +35,9 @@
     "reactify": "^1.1.1",
     "uglify-js": "^2.5.0",
     "underscore": "^1.8.3",
-    "watchify": "^3.4.0"
+    "watchify": "^3.4.0",
+    "express": "3.2.x",
+    "express-resource": "^1.0.0",
+    "mongoose": "^4.2.4"
   }
 }
