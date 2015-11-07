@@ -58,7 +58,7 @@ var ShareModalBody = React.createClass({
     var callback = function ( data ) {
       if ( data.status ) {
         console.log(
-            "Event created with id : %s, leader_id : %s", data.event_id, data.leader_id);
+            "Event created with id : %s, leader_id : %s", data.event_id, data.user_id);
         this.hideModal();
       } else {
         console.log("event crate failed");

@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var mongoose = require('mongoose');
 var eventSchema = require('../schema/event');
 var userSchema  = require('../schema/user');
@@ -27,7 +28,8 @@ module.exports = {
         res.send( { status:false, msg:err } );
         console.error(err);
       } else {
-        res.send( { status:true, obj:event } );
+        var user = _.last(event.member);
+        res.send( { status:true, obj:user } );
         console.log('User created :'+JSON.stringify(event));
       }
     });
