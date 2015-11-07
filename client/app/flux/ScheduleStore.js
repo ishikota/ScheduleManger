@@ -95,20 +95,15 @@ ScheduleStore.prototype.updateSchedule = function ( data ) {
   this.emitChange();
 }
 
-ScheduleStore.prototype.createEvent
-        = function ( leader_name, leader_schedule, callback) {
-  var event_id, leader_id;
-  // register event and leader to memDB
-  event_id= MemDB.createEvent();
-  leader_id = MemDB.createUser(event_id, leader_name, leader_schedule, true);
+ScheduleStore.prototype.createEvent = function ( event, leader, callback) {
   // set leader data as current account
-  this.event_data.account.id   = leader_id;
-  this.event_data.account.name = leader_name;
+  this.event_data.account.id   = leader._id;
+  this.event_data.account.name = leader.name;
   // send callback to ShareModal
   callback({
-    status    : event_id && leader_id != "-1",
-    event_id  : event_id,
-    leader_id : leader_id
+    status    : true, // TODO : should check error handling
+    event_id  : event._id,
+    user_id : leader._id
   });
 }
 

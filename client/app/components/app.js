@@ -31,7 +31,7 @@ Dispatcher.register( function ( payload ) {
     case ScheduleConstants.CREATE_EVENT:
       var dat = payload.data;
       ScheduleStore.createEvent(
-          dat.leader_name, dat.leader_schedule, dat.callback);
+          dat.event, dat.leader, dat.callback);
       break;
   }
 });

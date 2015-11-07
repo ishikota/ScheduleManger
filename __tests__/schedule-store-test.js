@@ -148,23 +148,18 @@ describe( 'ScheduleStore', function () {
 
   describe( 'createEvent', function () {
     it ( 'should save event in MemDB and set account info', function () {
-      var target,
-        dummy_event_id = "12345",
-        leader_name = "Kota",
-        leader_schedule = FakeData.getFakeEventData().member["1"].schedule,
-        callback = jest.genMockFunction(),
-        mockFunc = jest.genMockFunction(),
-        expected = { status : true, event_id : "abc", leader_id : "def" };
-      mockFunc.mockReturnValueOnce("abc")
-        .mockReturnValueOnce("def");
-      MemDB.createEvent = mockFunc;
-      MemDB.createUser = mockFunc;
-      ScheduleStore.createEvent(leader_name, leader_schedule, callback);
-      expect(mockFunc).toBeCalledWith("abc", leader_name, leader_schedule, true);
-      expect(callback).toBeCalledWith(expected);
-      // check if leader data is set to event_data.account
+      var
+        event = { _id:"abc", member:[] },
+        user  = { _id:"def", name:"Kota", schedule:[] },
+        mockFunc = jest.genMockFunction();
+      ScheduleStore.createEvent(event, user, mockFunc);
+      expect(mockFunc).toBeCalledWith({
+        status:true,
+        event_id:event._id,
+        user_id:user._id
+      });
       expect(ScheduleStore.event_data.account.id).toEqual("def");
-      expect(ScheduleStore.event_data.account.name).toEqual(leader_name);
+      expect(ScheduleStore.event_data.account.name).toEqual("Kota");
     });
   });
 

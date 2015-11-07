@@ -1,3 +1,4 @@
+var API = require('../api');
 var Dispatcher        = require("./Dispatcher");
 var ScheduleConstants = require("./ScheduleConstants");
 
@@ -47,15 +48,21 @@ var ScheduleActions = {
     });
   },
   createEvent : function( leader_name, leader_schedule, callback ) {
-    Dispatcher.dispatch({
-      actionType : ScheduleConstants.CREATE_EVENT,
-      data       : {
-        leader_name     : leader_name,
-        leader_schedule : leader_schedule,
-        callback        : callback
-      }
+    API.createEvent( function ( event_data, status ) {
+      API.createUser( event_data.obj._id, leader_name, leader_schedule, true,
+        function ( user_data, status ) {
+          Dispatcher.dispatch({
+            actionType : ScheduleConstants.CREATE_EVENT,
+            data       : {
+              event    : event_data.obj,
+              leader   : user_data.obj,
+              callback : callback
+            }
+          });
+        });
     });
   }
+
 }
 
 module.exports = ScheduleActions;

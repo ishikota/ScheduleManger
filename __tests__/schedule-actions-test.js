@@ -66,7 +66,7 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
-    it ( 'should dispatch creat event request', function () {
+    xit ( 'should dispatch creat event request', function () {
       var leader_name = "Kota";
       var leader_schedule = [];
       var callback = { dummy : true };
