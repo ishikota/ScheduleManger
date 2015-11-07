@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var React = require('react');
 var TEXT  = require('../text_content');
 var ShareModalBody = require('./share_modal_body');
@@ -20,7 +21,7 @@ var Modal = React.createClass({
     switch ( mode ) {
       case 0 :
         if ( !data.id ) { return "Error" }
-        var leader_name = data.member[data.leader].name;
+        var leader_name = this.getLeader(data.member).name;
         return leader_name + " " +TEXT.LOGIN_TITLE;
       case 1 :
         return TEXT.SHARE_TITLE;
@@ -48,6 +49,9 @@ var Modal = React.createClass({
         </div>
       </div>
     );
+  },
+  getLeader : function(member) {
+    return _.filter(member, function (m) { return m.leader })[0];
   }
 });
 

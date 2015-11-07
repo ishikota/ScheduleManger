@@ -21,16 +21,18 @@ describe ( 'Modal component', function () {
 
   it ( 'should render login modal', function () {
     var data = {
-      id : "a",
-      leader   : "1",
-      member   : FAKE_DATA.getFakeEventData().member
+      id : "any",
+      member   : [
+        { name : "Kota", leader : false },
+        { name : "Ishimo", leader:true }
+      ]
     };
     var subject = TestUtils.renderIntoDocument(<Modal mode={0} data={data}/>),
         title   = TestUtils.findRenderedDOMComponentWithTag(subject, "h4"),
         body    = TestUtils.findRenderedComponentWithType(subject, MainModalBody);
     expect(body.props.event_id).toEqual(data.id);
     expect(title.textContent)
-        .toEqual(data.member[data.leader].name+" "+TEXT.LOGIN_TITLE);
+        .toEqual("Ishimo "+TEXT.LOGIN_TITLE);
   });
 
 });
