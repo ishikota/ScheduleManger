@@ -1,11 +1,11 @@
 var React = require('react');
 var TEXT  = require('../text_content');
 var ScheduleActions = require('../flux/ScheduleActions');
-var ReactRouter = require('react-router');
-var History = ReactRouter.History;
+//var ReactRouter = require('react-router');
+//var History = ReactRouter.History;
 
 var ShareModalBody = React.createClass({
-  mixins : [ History ],
+//  mixins : [ History ],
   propTypes : {
     data : React.PropTypes.object.isRequired
   },
