@@ -167,17 +167,20 @@ describe( 'ScheduleStore', function () {
     it ( 'should insert account data into memDB and set account', function () {
       var
         eid = "abc",
-        name = "kota",
+        user_data = { _id:"def", name:"Kota", schedule:[1], leader:false },
         callback = jest.genMockFunction(),
         schedule = getEmptySchedule();
 
       spyOn(MemDB, "createUser").andReturn("def")
-      ScheduleStore.registerAccount(eid, name, callback);
-      expect(ScheduleStore.event_data.account.id).toEqual("def");
-      expect(ScheduleStore.event_data.account.name).toEqual(name);
+      ScheduleStore.registerAccount(eid, user_data, callback);
+      expect(ScheduleStore.event_data.account.id).toEqual(user_data._id);
+      expect(ScheduleStore.event_data.account.name).toEqual(user_data.name);
       expect(MemDB.createUser)
-              .toHaveBeenCalledWith( eid, name, schedule, false);
-      expect(callback).toBeCalledWith({ status:true, user_id:"def" } );
+              .toHaveBeenCalledWith( eid, user_data.name, user_data.schedule, user_data.leader);
+      expect(callback).toBeCalledWith({ status:true, user_id:user_data._id } );
+      // reset ScheduleStore.account
+      ScheduleStore.event_data.account.id = null;
+      ScheduleStore.event_data.account.name = null;
     });
   });
 
@@ -189,12 +192,13 @@ describe( 'ScheduleStore', function () {
         callback = jest.genMockFunction(),
         schedule = getEmptySchedule();
       spyOn(MemDB, "readUserByName").andReturn(
-        {id:"def", name:"kota", schedule:schedule, leader:false}
+        {_id:"def", name:"kota", schedule:schedule, leader:false}
       );
       ScheduleStore.loginAccount(eid, name, callback);
+      expect(MemDB.readUserByName).toHaveBeenCalledWith(eid, name);
+      expect(callback).toBeCalledWith({status:true, user_id:"def"});
       expect(ScheduleStore.event_data.account.id).toEqual("def");
       expect(ScheduleStore.event_data.account.name).toEqual(name);
-      expect(MemDB.readUserByName).toHaveBeenCalledWith(eid, name);
     });
   });
 

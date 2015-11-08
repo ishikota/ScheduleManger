@@ -69,6 +69,29 @@ describe( 'MemDb', function () {
     });
   });
 
+  describe( 'read user by name', function () {
+    it ( 'should get Kota data', function () {
+      var kota = {
+        "name"     : "Kota",
+        "leader"   : true,
+        "_id"      : "563eba4836b6e8aa5ef8da70",
+        "schedule" : []
+      };
+
+      MemDB.data["dummy_id"] = {
+        member:[
+          { "name"     : "mochama",
+            "leader"   : false,
+            "_id"      : "563eba4836b6e8aa5ef8da70",
+            "schedule" : [] },
+          kota
+        ]
+      };
+      expect(MemDB.readUserByName("dummy_id", "Kota")).toEqual(kota);
+      MemDB.data = {};
+    });
+  });
+
   describe ( 'get event data from fake server', function () {
 
     var eid = "abcdefgh";

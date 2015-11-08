@@ -22,7 +22,7 @@ Dispatcher.register( function ( payload ) {
       break;
     case ScheduleConstants.REGISTER_ACCOUNT:
       ScheduleStore.registerAccount(
-        payload.data.event_id, payload.data.user_name, payload.data.callback);
+        payload.data.event_id, payload.data.user_data, payload.data.callback);
       break;
     case ScheduleConstants.LOGIN_ACCOUNT:
       ScheduleStore.loginAccount(

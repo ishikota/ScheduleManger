@@ -36,7 +36,7 @@ describe( 'flux architecture for schedule data flow', function () {
       });
     });
 
-    it ( 'should dispatch create new account request', function () {
+    xit ( 'should dispatch create new account request', function () {
       var event_id  = "abcdefgh";
       var user_name = "Kota";
       var callback  = { dummy : true };

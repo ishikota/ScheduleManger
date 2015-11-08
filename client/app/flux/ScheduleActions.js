@@ -1,3 +1,4 @@
+var _   = require('underscore');
 var API = require('../api');
 var Dispatcher        = require("./Dispatcher");
 var ScheduleConstants = require("./ScheduleConstants");
@@ -28,14 +29,23 @@ var ScheduleActions = {
     });
   },
   registerAccount : function ( event_id, user_name, callback ) {
-    Dispatcher.dispatch({
-      actionType : ScheduleConstants.REGISTER_ACCOUNT,
-      data       : {
-        event_id  : event_id,
-        user_name : user_name,
-        callback  : callback
-      }
+    var empty_schedule = _.map(_.range(12), function () {
+      return _.map(_.range(32), function () {
+        return 0;
+      })
     });
+    API.createUser( event_id, user_name, empty_schedule, false,
+        function ( user_data, status ) {
+          Dispatcher.dispatch({
+            actionType : ScheduleConstants.REGISTER_ACCOUNT,
+            data       : {
+            event_id  : event_id,
+            user_data : user_data.obj,
+            callback  : callback
+            }
+          });
+        }
+    );
   },
   loginAccount : function ( event_id, user_name, callback ) {
     Dispatcher.dispatch({

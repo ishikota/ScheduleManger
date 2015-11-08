@@ -108,7 +108,7 @@ ScheduleStore.prototype.createEvent = function ( event, leader, callback) {
 }
 
 ScheduleStore.prototype.registerAccount
-        = function ( event_id, user_name, callback ) {
+        = function ( event_id, user_data, callback ) {
   var user_id,
     empty_schedule = _.map(_.range(12), function () {
       return _.map(_.range(32), function () {
@@ -116,10 +116,10 @@ ScheduleStore.prototype.registerAccount
       })
     });
   user_id = MemDB.createUser(
-      event_id, user_name, empty_schedule, false );
-  this.event_data.account.id   = user_id;
-  this.event_data.account.name = user_name;
-  callback( { status:true, user_id:user_id } );
+      event_id, user_data.name, user_data.schedule, user_data.leader );
+  this.event_data.account.id   = user_data._id;
+  this.event_data.account.name = user_data.name;
+  callback( { status:true, user_id:user_data._id } );
 }
 
 ScheduleStore.prototype.loginAccount
@@ -128,7 +128,9 @@ ScheduleStore.prototype.loginAccount
   if ( !user ) {
     callback( { status : false, user_id : null } );
   } else {
-    callback( { status : true, user_id : user.id });
+    this.event_data.account.id   = user._id;
+    this.event_data.account.name = user.name;
+    callback( { status : true, user_id : user._id });
   }
 }
 
