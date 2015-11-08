@@ -1,5 +1,5 @@
 var _ = require('underscore');
-var Util  = require('../util');
+var Util  = require('../../util');
 var mongoose = require('mongoose');
 var eventSchema = require('../schema/event');
 var userSchema  = require('../schema/user');
@@ -52,9 +52,33 @@ module.exports = {
     console.log('show user '+JSON.stringify(user));
   },
 
+  // update accept only name and schedule
   update: function(req, res) {
-    res.send( { status:false, msg:"Not Implmented yet" } );
-    console.log('update user '+JSON.stringify(req.user));
+    var user = req.event.member.id(req.params.user);
+    var name = req.body.name;
+    var schedule = req.body.schedule;
+    // validation
+    if ( schedule ) {
+      schedule = Util.formatSchedule(schedule);
+      if ( schedule == -1 ) {
+        res.send( {status:false, msg:"invalid schedule passed : "+schedule} );
+        return;
+      }
+      user.schedule = schedule;
+    }
+    if ( name ) {
+      user.name = name;
+    }
+    // save validated data
+    req.event.save(function(err, event) {
+      if(err){
+        res.send( { status:false, msg:err } );
+        console.error(err);
+      } else {
+        res.send( { status:true, obj:user } );
+        console.log('update user '+JSON.stringify(user));
+      }
+    });
   },
 
   destroy: function(req, res) {
@@ -69,10 +93,6 @@ module.exports = {
       }
     });
   },
-
-  validateSchedule : function( schedule ) {
-    return false;
-  }
 
 };
 
