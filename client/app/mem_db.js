@@ -2,6 +2,7 @@ var _   = require('underscore');
 var API = require('./api');
 var FakeData = require('./fake_data');
 var ScheduleActions = require('./flux/ScheduleActions');
+var Util = require('../../server/util');
 
 var MemDB = function () {
   this.data = {};
@@ -19,9 +20,15 @@ MemDB.prototype.genId = function ( length ) {
 MemDB.prototype.loadEventData = function ( event_id, callback ) {
   var that = this;
   API.readEvent( event_id, function( data, status ) {
+    // parse string array into integer array
+    var member = _.map(data.member,
+      function(m) {
+        m.schedule = Util.formatSchedule(m.schedule);
+        return m;
+      });
     that.data[event_id] = {
       id     : data._id,
-      member : data.member
+      member : member
     };
     callback();
   });

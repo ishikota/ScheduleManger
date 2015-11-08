@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Util  = require('../util');
 var mongoose = require('mongoose');
 var eventSchema = require('../schema/event');
 var userSchema  = require('../schema/user');
@@ -18,9 +19,19 @@ module.exports = {
   },
 
   create: function(req, res) {
+    // validate passed schedule
+    var schedule = Util.formatSchedule(req.body.schedule);
+    if ( schedule === -1 ) {
+      res.send(
+          { status:false,
+            msg:"Passed schedule contains NaN : "+req.body.schedule
+          });
+      return;
+    }
+
     req.event.member.push({
       name     : req.body.name,
-      schedule : req.body.schedule,
+      schedule : schedule,
       leader   : req.body.leader
     });
     req.event.save(function(err, event) {
@@ -30,7 +41,7 @@ module.exports = {
       } else {
         var user = _.last(event.member);
         res.send( { status:true, obj:user } );
-        console.log('User created :'+JSON.stringify(event));
+        console.log('User created :'+JSON.stringify(user));
       }
     });
   },
@@ -57,6 +68,10 @@ module.exports = {
         console.log('destroyed user '+JSON.stringify(user));
       }
     });
+  },
+
+  validateSchedule : function( schedule ) {
+    return false;
   }
 
 };
