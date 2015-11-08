@@ -1,8 +1,11 @@
 var React = require('react');
 var TEXT  = require('../text_content');
 var ScheduleActions = require('../flux/ScheduleActions');
+var ReactRouter = require('react-router');
+var History = ReactRouter.History;
 
 var ShareModalBody = React.createClass({
+  mixins : [ History ],
   propTypes : {
     data : React.PropTypes.object.isRequired
   },
@@ -60,6 +63,7 @@ var ShareModalBody = React.createClass({
         console.log(
             "Event created with id : %s, leader_id : %s", data.event_id, data.user_id);
         this.hideModal();
+        this.history.pushState(null, '/event/'+data.event_id);
       } else {
         console.log("event crate failed");
       }
@@ -70,7 +74,7 @@ var ShareModalBody = React.createClass({
   hideModal : function () {
     $('#modal').modal('hide');
   },
-    
+
   createShareTemplate : function ( name, schedule ) {
     var m, d, txt ="", date="";
     for ( m in schedule ) {
