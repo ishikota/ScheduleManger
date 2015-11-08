@@ -82,7 +82,7 @@ describe( 'App component', function () {
         header   = TestUtils.findRenderedComponentWithType(subject, MainHeader),
         modal    = TestUtils.findRenderedComponentWithType(subject, Modal),
         cal_data = { year:2015, month:9, day:31, schedule:[], owner_id:"1234" },
-        cal_expected = { owner_id : "1234" };
+        cal_expected = { event_id:"a", owner_id : "1234", schedule:[] };
       subject.setState( { cal_data : cal_data } );
       subject.setState( { event_data : { id:"a", leader:"1", member:{}} } );
       expect(header.props.data).toEqual(cal_expected);

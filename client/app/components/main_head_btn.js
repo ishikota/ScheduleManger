@@ -1,4 +1,5 @@
 var React = require('react');
+var API   = require('../api');
 var TEXT  = require('../text_content');
 var ScheduleStore = require('../flux/ScheduleStore');
 
@@ -16,8 +17,18 @@ var MainHeadBtn = React.createClass({
     );
   },
   handleClick : function (ev) {
-    var next_id = this.props.data.owner_id == "-1" ? "0" : "-1";
-    ScheduleStore.switchCalendar(next_id);
+    var data = this.props.data;
+    var next_id = data.owner_id == "-1" ? "0" : "-1";
+    if( data.owner_id != "-1" ) {
+      API.updateUser(data.event_id, data.owner_id, null, data.schedule,
+        function ( data, status ) {
+          console.log("Updated user : ", status);
+          ScheduleStore.switchCalendar(next_id);
+        }
+      );
+    } else {
+      ScheduleStore.switchCalendar(next_id);
+    }
   }
 });
 

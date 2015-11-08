@@ -75,7 +75,9 @@ var App = React.createClass({
   render : function () {
     var mode = this.props.children.type.displayName == 'Main' ? 0 : 1;
     var head_dat = mode === 0 ?
-      { owner_id : this.state.cal_data.owner_id } :
+      { event_id : this.state.event_data.id,
+        owner_id : this.state.cal_data.owner_id,
+        schedule : this.state.cal_data.schedule } :
       this.state.input_state;
     var modal_dat = mode === 0 ?
       this.state.event_data :

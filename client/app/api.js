@@ -25,6 +25,19 @@ var API = {
           console.log("createUser:", status);
           callback( data, status );
         });
+  },
+  updateUser : function ( event_id, user_id, name, schedule, callback ) {
+    var params = {};
+    if (name) params.name = name;
+    if (schedule) params.schedule = schedule;
+    $.ajax({
+      url: "http://localhost:3000/events/"+event_id+"/users/"+user_id,
+      type: 'PUT',
+      data: params,
+      success: function( data, status ) {
+        console.log("updateUser:", status);
+        callback( data, status );
+      }});
   }
 };
 
