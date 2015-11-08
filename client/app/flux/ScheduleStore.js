@@ -64,8 +64,9 @@ ScheduleStore.prototype.switchCalendar = function ( id ) {
       new_schedule = this.calcEventSchedule(event_id, filter);
       break;
     case "0":
-      id = this.event_data.account.id
-      new_schedule = MemDB.readEvent(event_id).member[id].schedule;
+      id = this.event_data.account.id;
+      new_schedule = MemDB.readUserByName(
+          this.event_data.id, this.event_data.account.name).schedule;
       break;
     default:
       new_schedule = MemDB.readEvent(event_id).member[id].schedule;

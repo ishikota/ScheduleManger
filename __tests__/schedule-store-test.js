@@ -234,9 +234,10 @@ describe( 'ScheduleStore', function () {
     });
 
     it ( 'should switch calendar to mine', function () {
-      var dummyObj = { member:{"1":{schedule:[1]},"2":{schedule:[2]} } };
-      spyOn(MemDB, "readEvent").andReturn(dummyObj);
+      var dummyObj = { id:"1",name:"Kota",schedule:[1],leader:true };
+      spyOn(MemDB, "readUserByName").andReturn(dummyObj);
       ScheduleStore.switchCalendar("0");
+      expect(MemDB.readUserByName).toHaveBeenCalledWith("abcdefgh", "Kota");
       ScheduleStore.receiveCalendarData(mockFunc);
       expect(mockFunc).toBeCalledWith({
         owner_id : "1",
