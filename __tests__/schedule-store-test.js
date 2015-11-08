@@ -63,21 +63,32 @@ describe( 'ScheduleStore', function () {
   });
 
   describe( 'schedule around', function () {
-    var before,
-        dummy_cal = _.extend( { month:9}, FakeData.getEventData());
+    var before_cal, before_acc,
+        dummy_cal = _.extend( { owner_id:"abc", month:9 }, FakeData.getEventData());
     beforeEach( function () {
-      before = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+      before_cal = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
+      before_acc = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
       ScheduleStore.event_data.calendar = JSON.parse(JSON.stringify(dummy_cal));
     });
     afterEach( function () {
-      ScheduleStore.event_data.calendar = before;
+      ScheduleStore.event_data.calendar = before_cal;
+      ScheduleStore.event_data.account = before_acc;
     });
 
     it ( 'should update schedule', function () {
+      ScheduleStore.event_data.account.id = "abc";
       expect(ScheduleStore.event_data.calendar.schedule[9][3]).toBe(0);
       ScheduleStore.updateSchedule( { day:3, next_state:1 } );
       expect(ScheduleStore.event_data.calendar.schedule[9][3]).toBe(1);
     });
+
+    it ( "should not update other's calendar", function () {
+      ScheduleStore.event_data.account.id = "def";
+      expect(ScheduleStore.event_data.calendar.schedule[9][3]).toBe(0);
+      ScheduleStore.updateSchedule( { day:3, next_state:1 } );
+      expect(ScheduleStore.event_data.calendar.schedule[9][3]).toBe(0);
+    });
+
 
     it ( 'should calculate the number of date which activated', function () {
       var res = ScheduleStore.calcEditInfo();

@@ -91,6 +91,8 @@ ScheduleStore.prototype.updateEvent = function ( event_id ) {
 
 ScheduleStore.prototype.updateSchedule = function ( data ) {
   console.log("chsc "+JSON.stringify(data));
+  // do not update if this calendar is not mine
+  if (this.event_data.calendar.owner_id != this.event_data.account.id) return;
   var month = this.event_data.calendar.month;
   this.event_data.calendar.schedule[month][data.day] = data.next_state;
   this.emitChange();
