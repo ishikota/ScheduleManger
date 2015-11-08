@@ -1,12 +1,13 @@
 module.exports = {
+  APP_NAME : "Schedule Manager",
   WELCOME_INTRO: "まずは，イベントの候補日を決めましょう．",
   WELCOME_HOWTO_SELECT: "候補日を下のカレンダーでクリックしてください.",
   WELCOME_HEADER_BUTTON : "イベントを作成",
   WELCOME_INPUT_STATE : "日の候補日が選択されています．",
   WELCOME_HOWTO_SAVE  : "候補日の選択が終わったら，右上の「イベントを作成」をクリックしてください．",
 
-  MAIN_HEADER_MY_CALENDAR    : "自分のカレンダー",
-  MAIN_HEADER_EVENT_CALENDAR : "イベントのカレンダー",
+  EDIT_MY_SCHEDULE : "自分の予定を編集する",
+  FINISH_EDIT      : "編集を終える",
 
   SHARE_TITLE       : "イベントをシェアしましょう!!",
   SHARE_NAME_LABEL  : "あなたの名前",

@@ -2,6 +2,7 @@ var React = require('react');
 var MainHeadBtn     = require('./main_head_btn');
 var WelcomeBtn      = require('./welcome_head_btn');
 var ScheduleActions = require('../flux/ScheduleActions');
+var TEXT = require('../text_content');
 
 var MainHeader = React.createClass({
   propTypes : {
@@ -23,7 +24,7 @@ var MainHeader = React.createClass({
       <nav className="main-header navbar navbar-default">
         <div className="container">
           <div className="navbar-header">
-            <a className="navbar-brand" href="#">Schedule Manager</a>
+            <a className="navbar-brand" href="#">{TEXT.APP_NAME}</a>
           <div className="btn-toolbar pull-right">
             <div className="main-header-btn-group btn-group">
               {this.renderButton(this.props.mode)}

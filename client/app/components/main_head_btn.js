@@ -9,8 +9,8 @@ var MainHeadBtn = React.createClass({
   render : function () { 
     var clazz = "btn btn-primary";
     var txt = this.props.data.owner_id === "-1" ?
-        TEXT.MAIN_HEADER_MY_CALENDAR:
-        TEXT.MAIN_HEADER_EVENT_CALENDAR;
+        TEXT.EDIT_MY_SCHEDULE:
+        TEXT.FINISH_EDIT;
     return (
       <btn className={clazz} onClick={this.handleClick}>{txt}</btn>
     );

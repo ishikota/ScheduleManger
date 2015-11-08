@@ -17,7 +17,7 @@ describe( 'WelcomeHeadBtn component', function () {
 
     it ( 'should display to-my-calendar message', function () {
       expect(React.findDOMNode(subject).textContent)
-          .toEqual(TEXT.MAIN_HEADER_MY_CALENDAR);
+          .toEqual(TEXT.EDIT_MY_SCHEDULE);
     });
 
     it ( 'should handle click', function () {
@@ -41,7 +41,7 @@ describe( 'WelcomeHeadBtn component', function () {
 
     it ( 'should display to-event-calendar message', function () {
       expect(React.findDOMNode(subject).textContent)
-          .toEqual(TEXT.MAIN_HEADER_EVENT_CALENDAR);
+          .toEqual(TEXT.FINISH_EDIT);
     });
 
     it ( 'should handle click', function () {
