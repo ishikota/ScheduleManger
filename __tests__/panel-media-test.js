@@ -15,22 +15,21 @@ describe( 'PanelMedia component', function () {
 
   describe( 'display content', function () {
     var subject,
-        msg = "Test Message!!",
-        avatar = FakeData.PANEL2().data[0].avtr
+        data = FakeData.getDummyPanelData().data[0];
 
     beforeEach( function () {
       subject = TestUtils.renderIntoDocument(
-        <PanelMedia msg={msg} avtr={avatar}/>
+        <PanelMedia msg={data.msg} member={data.member}/>
       );
     });
 
     it ( 'should display passed message', function () {
-      expect(React.findDOMNode(subject).textContent).toEqual(msg);
+      expect(React.findDOMNode(subject).textContent).toEqual(data.msg);
     });
 
     it ( 'should display passed avatars', function () {
       var avtrs = TestUtils.scryRenderedDOMComponentsWithClass(subject, "avtr");
-      expect(avtrs.length).toBe(avatar.length);
+      expect(avtrs.length).toBe(data.member.length);
     });
 
   });

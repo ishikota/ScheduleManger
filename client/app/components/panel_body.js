@@ -6,7 +6,7 @@ var PanelBody = React.createClass({
     return this.props.items.data.map( function ( item, i ) {
       return (
         <li key={i} className="media">
-          <PanelMedia msg={item.msg} avtr={item.avtr} />
+          <PanelMedia msg={item.msg} member={item.member} />
         </li>
       );
     });

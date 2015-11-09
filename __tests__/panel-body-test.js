@@ -12,18 +12,18 @@ describe( 'PanelBody component', function () {
     var subject;
     beforeEach( function () {
       subject = TestUtils.renderIntoDocument(
-        <PanelBody items={FakeData.PANEL2()} />
+        <PanelBody items={FakeData.getDummyPanelData()} />
       );
     });
 
     it ( 'should pass information to media', function () {
       var i,
-        data  = FakeData.PANEL2().data,
+        data  = FakeData.getDummyPanelData().data,
         media = TestUtils.scryRenderedComponentsWithType(subject, PanelMedia);
-      expect(media.length).toBe(2);
+      expect(media.length).toBe(3);
       for (i=0; i<media.length; i++) {
         expect(media[i].props.msg).toEqual(data[i].msg);
-        expect(media[i].props.avtr).toEqual(data[i].avtr);
+        expect(media[i].props.member).toEqual(data[i].member);
       }
     });
   });
