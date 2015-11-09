@@ -3,6 +3,7 @@ var MemDB        = require("../mem_db");
 var events       = require("events");
 var CHANGE_EVENT = "changeEvent";
 var FakeData     = require("../fake_data");
+var ScheduleCalculator = require('../schedule_calculator');
 
 var ScheduleStore = function() {
   this.emitter = new events.EventEmitter();
@@ -149,7 +150,9 @@ ScheduleStore.prototype.receiveCalendarData = function(callback) {
 }
 
 ScheduleStore.prototype.receivePanelData = function(callback) {
-  callback(this.calcSchedule());
+  var data = MemDB.readEvent(this.event_data.id);
+  var panel_data = ScheduleCalculator.calcEventPanelData(data);
+  callback(panel_data);
 }
 
 ScheduleStore.prototype.receiveInputState = function(callback) {

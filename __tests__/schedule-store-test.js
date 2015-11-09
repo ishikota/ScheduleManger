@@ -2,12 +2,13 @@ jest.dontMock('../client/app/flux/ScheduleStore')
 jest.dontMock('../client/app/fake_data');
 
 describe( 'ScheduleStore', function () {
+  var _ = require('underscore');
   var React     = require('react/addons');
   var TestUtils = React.addons.TestUtils;
-  var ScheduleStore = require('../client/app/flux/ScheduleStore');
+  var MemDB     = require('../client/app/mem_db');
   var FakeData  = require('../client/app/fake_data');
-  var _ = require('underscore');
-  var MemDB = require('../client/app/mem_db');
+  var ScheduleStore = require('../client/app/flux/ScheduleStore');
+  var ScheduleCalculator = require('../client/app/schedule_calculator');
 
   var calendar = { owner_id:"-1", year:2015, month:9, day:31, filter:0, schedule:[1,0,0,1,1] };
   var answer =
@@ -129,8 +130,19 @@ describe( 'ScheduleStore', function () {
           };
       ScheduleStore.receiveCalendarData(clbk);
       expect(clbk).lastCalledWith(expected);
-      ScheduleStore.receivePanelData(clbk);
-      //expect(clbk).lastCalledWith(FakeData.PANEL1);
+    });
+
+    it ( 'should receive panel data', function () {
+      var callback = jest.genMockFunction();
+      var before = ScheduleStore.event_data.id;
+      ScheduleStore.event_data.id = "abc";
+      spyOn(MemDB, "readEvent").andReturn(FakeData.getDummyEventData());
+      spyOn(ScheduleCalculator, "calcEventPanelData");
+      ScheduleStore.receivePanelData(callback);
+      expect(MemDB.readEvent).toHaveBeenCalledWith("abc");
+      expect(ScheduleCalculator.calcEventPanelData).toHaveBeenCalledWith(FakeData.getDummyEventData());
+      expect(callback).toBeCalled();
+      ScheduleStore.event_data.id = before;
     });
 
   });

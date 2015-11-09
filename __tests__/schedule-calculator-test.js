@@ -1,30 +1,29 @@
 jest.dontMock('../client/app/schedule_calculator');
+jest.dontMock('../client/app/fake_data');
 
 
 describe( 'calculate schedule', function () {
   var _ = require('underscore');
+  var FakeData = require('../client/app/fake_data');
   var ScheduleCalculator = require('../client/app/schedule_calculator');
-  var getEmptySchedule = function () {
-    return _.map(_.range(12), function () {
-      return _.map(_.range(32), function () {
-        return 0;
-      })
-    });
-  };
-  var s1 = getEmptySchedule();
-  var s2 = getEmptySchedule();
-  var s3 = getEmptySchedule();
-  s1[9][4]=1;s1[9][5]=1;s1[9][6]=1;s1[9][7]=1;s1[9][8]=1;s1[9][9]=1;
-             s2[9][5]=1;s2[9][6]=1;           s2[9][8]=1;
-  s3[9][4]=1;s3[9][5]=1;
 
-  var kota = { _id : "d", name:"Kota", leader:true , schedule : s1 };
-  var ishm = { _id : "e", name:"Ishm", leader:false, schedule : s2 };
-  var motu = { _id : "f", name:"motu", leader:false, schedule : s3 };
-  var event_data = {
-    id : "abc",
-    member : [ kota, ishm, motu ]
-  };
+  var event_data = FakeData.getDummyEventData();
+  var kota = event_data.member[0];
+  var ishm = event_data.member[1];
+  var motu = event_data.member[2];
+
+  it ( 'should return empty result', function () {
+    var data = FakeData.getDummyEventData();
+    data.member[1].schedule[9][5] = 0;
+    data.member[1].schedule[9][6] = 0;
+    data.member[1].schedule[9][8] = 0;
+    data.member[2].schedule[9][4] = 0;
+    data.member[2].schedule[9][5] = 0;
+    var expected = FakeData.getDummyPanelData();
+    expected.summary = "No match found...";
+    expected.data = [];
+    expect(ScheduleCalculator.calcEventPanelData(data)).toEqual(expected);
+  });
 
   it ( 'should calculate event schedule', function () {
     var res = ScheduleCalculator.calcEventPanelData(event_data);
@@ -46,7 +45,7 @@ describe( 'calculate schedule', function () {
     res = ScheduleCalculator.removeEmptyDate(res);
     for(var i=0;i<12;i++) {
       if (i==9) {
-        expect(res[i].length).toBe(6);
+        expect(res[i].length).toBe(4);
       } else { 
         expect(res[i].length).toBe(0);
       }
@@ -65,9 +64,7 @@ describe( 'calculate schedule', function () {
       [9,4,[kota,motu]],
       [9,5,[kota,ishm,motu]],
       [9,6,[kota,ishm]],
-      [9,7,[kota]],
       [9,8,[kota,ishm]],
-      [9,9,[kota]]
     ];
     var res = ScheduleCalculator.combineMemberSchedule(event_data);
     res = ScheduleCalculator.removeEmptyDate(res);

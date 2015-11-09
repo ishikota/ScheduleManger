@@ -33,7 +33,7 @@ ScheduleCalculator.prototype.combineMemberSchedule = function(event_data) {
 ScheduleCalculator.prototype.removeEmptyDate = function(combined) {
   return _.map(combined, function(e) {
     return _.filter(e, function(ee) {
-      return ee[2].length!=0;
+      return ee[2].length > 1;
     });
   });
 };
@@ -43,23 +43,28 @@ ScheduleCalculator.prototype.removeEmptyMonth = function(removed) {
 }
 
 ScheduleCalculator.prototype.flattenResult = function(res) {
-  return _.reduceRight(res, function(acc,e) { return acc.concat(e); });
+  return _.reduce(res, function(acc,e) { return acc.concat(e); }, []);
 }
 
 ScheduleCalculator.prototype.formatData = function(raw) {
   var data = {};
-  if(raw.length==0) { return "empty" };//TODO fix empty
-  var ranking = _.sortBy(raw, function(e){ return e[2].length }).reverse();
-  var top3 = _.first(ranking, 3);
-  data.summary = "Max "+top3[0].length+" people attends";
   data.filter = 0;
   data.date = "-1";
-  data.data = _.map(top3, function(e) {
-    return {
-      msg : (e[0]+1)+"/"+e[1]+" "+e[2].length+" people attends",
-      member : e[2]
-    };
-  });
+
+  if(raw.length==0) {
+    data.summary = "No match found...";
+    data.data = [];
+  } else {
+    var ranking = _.sortBy(raw, function(e){ return e[2].length }).reverse();
+    var top3 = _.first(ranking, 3);
+    data.summary = "Max "+top3[0].length+" people attends";
+    data.data = _.map(top3, function(e) {
+      return {
+        msg : (e[0]+1)+"/"+e[1]+" "+e[2].length+" people attends",
+        member : e[2]
+      };
+    });
+  }
   return data;
 }
 
