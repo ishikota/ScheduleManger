@@ -150,8 +150,15 @@ ScheduleStore.prototype.receiveCalendarData = function(callback) {
 }
 
 ScheduleStore.prototype.receivePanelData = function(callback) {
+  var panel_data;
   var data = MemDB.readEvent(this.event_data.id);
-  var panel_data = ScheduleCalculator.calcEventPanelData(data);
+  if ( data ) {
+    panel_data = ScheduleCalculator.calcEventPanelData(data);
+  } else { // before loading event data from server
+    panel_data = FakeData.PANEL1();
+    panel_data.summary = "loading ...";
+    panel_data.data = [];
+  }
   callback(panel_data);
 }
 
