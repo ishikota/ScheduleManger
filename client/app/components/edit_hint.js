@@ -1,4 +1,5 @@
 var React = require('react');
+var TEXT = require('../text_content');
 
 var EditHint = React.createClass({
   propTypes : {
@@ -15,18 +16,18 @@ var EditHint = React.createClass({
     return (
         <div className="panel panel-default edit-hint" >
         <div className={clazz}>
-          <p className="pull-left col-sm-11">Switch state by click date</p>
+          <p className="pull-left col-sm-11">{TEXT.EDIT_CLICK_DESC}</p>
           <button type="button" className="close col-sm-1" 
                   data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
           <div style={{clear:"both"}}></div>
           <p className="col-sm-12">
-            <img className="eh-mark ok"/><span className="eh-txt">OK</span>
-            <img className="eh-mark pend"/><span className="eh-txt">Pending</span>
-            <img className="eh-mark no"/><span className="eh-txt">Busy</span>
+            <img className="eh-mark ok"/><span className="eh-txt">{TEXT.OK}</span>
+            <img className="eh-mark pend"/><span className="eh-txt">{TEXT.PENDING}</span>
+            <img className="eh-mark no"/><span className="eh-txt">{TEXT.BUSY}</span>
           </p>
-          <p className="col-sm-12">Completion Rate</p>
+          <p className="col-sm-12">{TEXT.COMPLETION_RATE}</p>
           <div className="col-sm-12">
             <div className="progress">
               <div className="progress-bar progress-bar-success"

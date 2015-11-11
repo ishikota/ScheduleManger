@@ -92,8 +92,13 @@ th {
   color : #fff;
 }
 
+.cal-cell.yellow {
+  background : #FFA726;
+  color : #fff;
+}
+
 .cal-cell.red {
-  background : #FF0000;
+  background : #F44336;
   color : #fff;
 }
 

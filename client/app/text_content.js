@@ -26,6 +26,13 @@ module.exports = {
   LOGIN_TAB_REGISTER : "登録",
   LOGIN_WARNING      : "さんは，このイベントに登録されていません．",
 
-  REGISTER_WARNING : "その名前はイベント内で既に使われています．"
+  REGISTER_WARNING : "その名前はイベント内で既に使われています．",
+
+  EDIT_CLICK_DESC : "日付をクリックすると出席状況を切り替えられます．",
+  COMPLETION_RATE : "入力達成率",
+  
+  OK      : "行ける",
+  PENDING : "びみょう",
+  BUSY    : "ムリ"
 
 }

@@ -47,7 +47,7 @@ var Main = React.createClass({
       </div>
     );
   },
-  colors : ["", "blue", "red", "red"],
+  colors : ["", "blue", "yellow", "red"],
   callback : function (data) {
     ScheduleActions.updateSchedule(data);
   }
