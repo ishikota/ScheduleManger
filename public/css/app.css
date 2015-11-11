@@ -107,6 +107,26 @@ th {
   overflow-y: scroll;
 }
 
+.numberCircle {
+    display:inline-block;
+    line-height:0px;
+    
+    border-radius:50%;
+    border:2px solid;
+    
+    font-size:14px;
+}
+
+.numberCircle span {
+    display:inline-block;
+    
+    padding-top:50%;
+    padding-bottom:50%;
+    
+    margin-left:8px;
+    margin-right:8px;
+}
+
 .caret.left {
   margin-right: 8px;
 }

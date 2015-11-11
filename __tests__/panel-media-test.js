@@ -24,12 +24,16 @@ describe( 'PanelMedia component', function () {
     });
 
     it ( 'should display passed message', function () {
-      expect(React.findDOMNode(subject).textContent).toEqual(data.msg);
+      var target = TestUtils.findRenderedDOMComponentWithTag(subject, "p");
+      expect(target.textContent).toEqual(data.msg);
     });
 
     it ( 'should display passed avatars', function () {
       var avtrs = TestUtils.scryRenderedDOMComponentsWithClass(subject, "avtr");
       expect(avtrs.length).toBe(data.member.length);
+      expect(avtrs[0].textContent).toEqual("Kota");
+      expect(avtrs[1].textContent).toEqual("Ishm");
+      expect(avtrs[2].textContent).toEqual("motu");
     });
 
   });

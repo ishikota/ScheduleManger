@@ -14,7 +14,8 @@ var PanelMedia = React.createClass({
   },
   renderAvatars : function () {
     return this.props.member.map( function ( info, i ) {
-      return <img key={i} className="avtr img-circle" src={this.genIconPath(info.icon)}/>;
+      return (<span key={i} className="avtr numberCircle"><span>
+                 {info.name}</span></span>);
     }.bind(this));
   },
   render : function () {
