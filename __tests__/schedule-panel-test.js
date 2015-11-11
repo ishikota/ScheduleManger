@@ -9,6 +9,7 @@ describe( 'Panel component', function () {
   var PanelBody   = require('../client/app/components/panel_body');
   var TestUtils   = React.addons.TestUtils;
   var FakeData    = require('../client/app/fake_data');
+  var TEXT        = require('../client/app/text_content');
 
   describe( 'display content', function () {
     var subject, data;
@@ -26,7 +27,7 @@ describe( 'Panel component', function () {
       expect(panel[0].props.menu).toEqual(
         [
           { id : 1 , title : "Filter-1"   },
-          { id : 0 , title : "Filter-All" },
+          { id : 0 , title : TEXT.FILTER_MOST },
           { id : 2 , title : "Filter-2"   },
           { id : 3 , title : "Filter-3"   }
         ]);

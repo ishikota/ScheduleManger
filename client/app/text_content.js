@@ -33,6 +33,8 @@ module.exports = {
   
   OK      : "行ける",
   PENDING : "びみょう",
-  BUSY    : "ムリ"
+  BUSY    : "ムリ",
+
+  FILTER_MOST : "参加者が多い日を探す"
 
 }

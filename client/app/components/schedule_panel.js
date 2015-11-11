@@ -1,5 +1,6 @@
 var React = require('react');
 var Panel = require('./panel');
+var TEXT  = require('../text_content');
 
 var SchedulePanel = React.createClass({
   render : function () {
@@ -21,7 +22,7 @@ var SchedulePanel = React.createClass({
     return ordered_menu;
   },
   menu : [
-    { id : 0 , title : "Filter-All" },
+    { id : 0 , title : TEXT.FILTER_MOST },
     { id : 1 , title : "Filter-1"   },
     { id : 2 , title : "Filter-2"   },
     { id : 3 , title : "Filter-3"   }

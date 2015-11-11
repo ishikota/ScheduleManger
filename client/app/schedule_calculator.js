@@ -56,7 +56,7 @@ ScheduleCalculator.prototype.formatData = function(raw) {
     data.data = [];
   } else {
     var ranking = _.sortBy(raw, function(e){ return e[2].length }).reverse();
-    var top3 = _.first(ranking, 3);
+    var top3 = ranking;
     data.summary = "Max "+top3[0].length+" people attends";
     data.data = _.map(top3, function(e) {
       return {
