@@ -83,6 +83,11 @@ MemDB.prototype.readUserByName = function ( event_id, user_name ) {
   }
 };
 
+MemDB.prototype.getLeader = function ( event_id ) {
+  return _.first(
+      _.filter(this.data[event_id].member, function(e) { return e.leader; })
+      )
+}
 
 MemDB.prototype.insert = function ( id, data ) {
   this.data.id = data;

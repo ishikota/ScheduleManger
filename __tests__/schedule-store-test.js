@@ -90,14 +90,6 @@ describe( 'ScheduleStore', function () {
       expect(ScheduleStore.event_data.calendar.schedule[9][3]).toBe(0);
     });
 
-
-    it ( 'should calculate the number of date which activated', function () {
-      var res = ScheduleStore.calcEditInfo();
-      expect(res.numer).toBe(5);
-      expect(res.denom).toBe(32);
-    });
-
-
   });
 
   describe( 'emit change when Action received', function () {
@@ -165,7 +157,9 @@ describe( 'ScheduleStore', function () {
     it ( 'should receive current input state and ratio', function () {
       var expected = FakeData.getFakeCalendar().schedule;
       ScheduleStore.receiveInputState(mockFunc);
-      expect(mockFunc).lastCalledWith({schedule:expected,numer:2,denom:32});
+      expect(mockFunc).lastCalledWith(
+        {schedule:expected,numer:2,denom:1,editing:false}
+        );
     });
   });
 
@@ -231,7 +225,7 @@ describe( 'ScheduleStore', function () {
       before_cal = JSON.parse(JSON.stringify(ScheduleStore.event_data.calendar));
       before_acc = JSON.parse(JSON.stringify(ScheduleStore.event_data.account));
       mockFunc = jest.genMockFunction();
-      ScheduleStore.event_data.calendar = calendar;
+      ScheduleStore.event_data.calendar = JSON.parse(JSON.stringify(calendar));
       ScheduleStore.event_data.id = "abcdefgh";
       ScheduleStore.event_data.account = { id:"1", name:"Kota" };
     });
@@ -321,6 +315,24 @@ describe( 'ScheduleStore', function () {
       ScheduleStore.receiveEventData(mockFunc);
       expect(mockFunc).toBeCalled();
       expect(MemDB.readEvent.mock.calls[0][0]).toEqual("0");
+    });
+  });
+
+  describe(' use calendar', function () {
+    var before;
+    beforeEach(function() {
+      before = JSON.parse(JSON.stringify(ScheduleStore.event_data));
+      ScheduleStore.event_data.calendar.schedule = getEmptySchedule();
+    });
+    afterEach(function() {
+      ScheduleStore.event_data = before;
+    });
+    it ( 'should calculate edit info', function () {
+      var leader = FakeData.getDummyEventData().member[0];
+      spyOn(MemDB, "getLeader").andReturn(leader);
+      expect(ScheduleStore.calcEditInfo()).toEqual({numer:0,denom:6});
+      ScheduleStore.event_data.calendar.schedule[9][6] = 1;
+      expect(ScheduleStore.calcEditInfo()).toEqual({numer:1,denom:6});
     });
   });
 

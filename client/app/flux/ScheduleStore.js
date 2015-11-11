@@ -165,6 +165,7 @@ ScheduleStore.prototype.receivePanelData = function(callback) {
 ScheduleStore.prototype.receiveInputState = function(callback) {
   var info = this.calcEditInfo();
   _.extend(info, {schedule:this.event_data.calendar.schedule});
+  _.extend(info, {editing:this.event_data.calendar.owner_id!="-1"});
   callback(info);
 }
 
@@ -203,18 +204,17 @@ ScheduleStore.prototype.calcSchedule = function ( people_id ) {
 }
 
 ScheduleStore.prototype.calcEditInfo = function() {
-  var month, day, 
-      denom = 0, 
-      numer = 0,
-      sd = this.event_data.calendar.schedule;
-
-  for ( month in sd ) {
-    for ( day in sd[month] ) {
-      denom += 1;
-      if ( sd[month][day] == 1 ) { numer += 1; }
-    }
-  }
-
+  var count = function(schedule) {
+    return _.reduce(schedule, function(memo, num) {
+      return memo + _.reduce(num, function(memo2, num2) {
+        var append = num2 != 0 ? 1 : 0;
+        return memo2 + append;
+      }, 0);
+    }, 0);
+  };
+  var leader = !this.event_data.id ? false : MemDB.getLeader(this.event_data.id);
+  var numer = count(this.event_data.calendar.schedule);
+  var denom = leader ? count(leader.schedule) : 1;
   return { numer : numer, denom : denom };
 }
 

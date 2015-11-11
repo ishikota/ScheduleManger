@@ -107,6 +107,7 @@ module.exports = {
 
   getFakeCalendar : function () {
     return {
+      owner_id : "-1",
       year     : 2015,
       month    : 9,
       day      : 31,

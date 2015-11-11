@@ -56,6 +56,8 @@ describe( 'MemDb', function () {
         { id:leader_id, name:leader_name, schedule:schedule,leader:true} );
       expect(MemDB.readUser(event_id, user_id)).toEqual(
         { id:user_id, name:user_name, schedule:schedule,leader:false } );
+      expect(MemDB.getLeader(event_id)).toEqual(
+        { id:leader_id, name:leader_name, schedule:schedule,leader:true} );
     });
 
     it ( 'should not create same name user', function () {
